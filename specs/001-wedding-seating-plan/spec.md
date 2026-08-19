@@ -13,6 +13,7 @@
 ### Session 2026-08-19
 
 - Q: How should the solver turn guest narratives into seating rules? -> A: Direct named references create hard rules; shared traits and venue cues are soft preferences.
+- Q: Should the solver treat a guest's group value, such as family or work, as a soft seating preference? -> A: Use group membership as a lowest-priority soft preference.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -85,10 +86,11 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-006**: The system MUST assign Bartek and Nina to `T1`.
 - **FR-007**: The system MUST write a result that conforms to the published wedding seating output schema and contains no additional output fields.
 - **FR-008**: The system MUST use a documented seating-policy catalogue derived from explicit signals in guest groups, guest descriptions, and table-location notes; it MUST NOT derive seating rules from workation team membership or unstated organizer intent.
-- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, then location preferences.
+- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, location preferences, then group-membership preferences.
 - **FR-010**: The system MUST produce the same plan for identical valid input.
 - **FR-011**: The system MUST report input-validation and output-writing failures clearly, and MUST NOT leave a partial or schema-valid-looking output plan after a failed run.
 - **FR-012**: Only an unambiguous narrative reference that names another guest may create a hard companion or separation rule; shared traits and table-location cues are soft preferences.
+- **FR-013**: The system MAY use supplied guest group membership as the lowest-priority soft preference only after all higher-priority seating constraints and preferences are satisfied.
 
 ### Key Entities *(include if feature involves data)*
 
