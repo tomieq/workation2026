@@ -14,6 +14,8 @@
 
 - Q: How should the solver turn guest narratives into seating rules? -> A: Direct named references create hard rules; shared traits and venue cues are soft preferences.
 - Q: Should the solver treat a guest's group value, such as family or work, as a soft seating preference? -> A: Use group membership as a lowest-priority soft preference.
+- Q: When soft preferences conflict at the same priority, how should the solver choose between equally valid plans? -> A: Choose the lexicographically smallest final table and guest-ID arrangement.
+- Q: If generation fails and the output path already contains an earlier valid plan, should the program keep or delete that existing file? -> A: Keep any existing output unchanged on failure.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -88,9 +90,10 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-008**: The system MUST use a documented seating-policy catalogue derived from explicit signals in guest groups, guest descriptions, and table-location notes; it MUST NOT derive seating rules from workation team membership or unstated organizer intent.
 - **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, location preferences, then group-membership preferences.
 - **FR-010**: The system MUST produce the same plan for identical valid input.
-- **FR-011**: The system MUST report input-validation and output-writing failures clearly, and MUST NOT leave a partial or schema-valid-looking output plan after a failed run.
+- **FR-011**: The system MUST report input-validation and output-writing failures clearly, MUST publish a new output plan only after successful validation, and MUST leave any existing output file unchanged after a failed run.
 - **FR-012**: Only an unambiguous narrative reference that names another guest may create a hard companion or separation rule; shared traits and table-location cues are soft preferences.
 - **FR-013**: The system MAY use supplied guest group membership as the lowest-priority soft preference only after all higher-priority seating constraints and preferences are satisfied.
+- **FR-014**: When multiple plans satisfy the same seating constraints and preferences, the system MUST choose the lexicographically smallest arrangement by table ID and then guest ID.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -110,6 +113,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **SC-004**: The supplied 30-guest scenario produces a plan or a clear validation failure within 10 seconds on the challenge machine.
 - **SC-005**: In review of the supplied scenario, all documented high-priority seating policies are honored; any lower-priority policy not honored is accompanied by a capacity or higher-priority conflict explanation in the project artifacts.
 - **SC-006**: A reviewer can complete the primary workflow, from a valid scenario to a schema-valid plan, on the first attempt using the documented command and without manual JSON editing.
+- **SC-007**: Given an input with more than one equally preferred valid plan, generation selects the lexicographically smallest arrangement by table ID and then guest ID in 100% of runs.
 
 ## Assumptions
 
