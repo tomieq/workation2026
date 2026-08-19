@@ -1,5 +1,32 @@
 # Research: Wedding Seating Plan
 
+## Scenario 2 Amendment Decisions
+
+## Decision: Decode `extraSeatPolicy` as input-owned capacity authorization
+
+- **Rationale**: `input/scenario2.json` provides five base six-seat tables and authorizes one extra chair at any table. Decoding and validating that policy preserves the venue layout while allowing exactly one seven-guest output table.
+- **Alternatives considered**: Editing one input table to capacity seven loses the distinction between the base room and the solver's decision. Ignoring the field makes the 31-guest scenario impossible to validate.
+
+## Decision: Select the seventh-chair table by deterministic candidate comparison
+
+- **Rationale**: Evaluate a complete candidate for every eligible seven-seat table with the same hard constraints and ordered soft-policy objective; choose the highest-scoring valid candidate. Equal outcomes use the existing canonical sorted table/guest vector.
+- **Alternatives considered**: Always expanding a fixed table contradicts the clarification. First-available placement makes capacity an incidental allocation artifact.
+
+## Decision: Make the Scenario 2 `T1` composition a hard placement constraint
+
+- **Rationale**: `T1` must contain Bartek, Nina, and exactly two other `work` guests; Bartek is excluded from that colleague count. Reserve and validate this composition before soft preferences.
+- **Alternatives considered**: A high score for work colleagues cannot prove the exact count. The prior one-colleague preference contradicts the approved change.
+
+## Decision: Replace retired policies with only evidence-backed newcomer policies
+
+- **Rationale**: Add soft avoidance for `leszek` with `kuba_g` and `michal_z`, and a newcomer work-cluster penalty at four or more work-group guests. Treat Michał S. only as an active work-group guest; do not derive a Bald Club policy.
+- **Alternatives considered**: Retaining departed-guest policies obscures the active rules. Interpreting Bald Club history as a preference invents organizer intent.
+
+## Decision: Extend the deterministic planner without a new optimizer dependency
+
+- **Rationale**: The fixed five-table scope permits deterministic construction plus bounded, repeatable assignment improvement for every seat-table candidate. Compare completed candidates by the documented objective and canonical vector.
+- **Alternatives considered**: An external solver adds unrequested build and review surface. Brute-forcing every 31-guest assignment cannot meet the 10-second target.
+
 ## Decision: Use Swift 6.2, SwiftPM, and SwiftAgent
 
 - **Rationale**: The repository already declares Swift 6.2 and an executable target. SwiftAgent publishes the `SwiftAgent` library product, supports OpenAI-compatible and Ollama providers, and can expose application-owned tools to an agent session.

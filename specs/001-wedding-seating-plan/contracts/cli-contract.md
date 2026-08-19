@@ -10,7 +10,16 @@
 
 ## Input
 
-The scenario format is represented by [input/scenario1.json](../../../input/scenario1.json). Before planning, the executable requires five distinct tables (`T1` through `T5`), capacity six for each table, exactly 30 guests, unique non-empty guest IDs, and distinct Bartek and Nina guests.
+The Scenario 2 format is represented by [input/scenario2.json](../../../input/scenario2.json). Before planning, the executable requires five distinct base tables (`T1` through `T5`) with capacity six, exactly 31 active guests with unique non-empty IDs, distinct Bartek and Nina guests, and this capacity authorization:
+
+```json
+"extraSeatPolicy": {
+  "extraSeats": 1,
+  "canBeAddedToAnyTable": true
+}
+```
+
+The active roster excludes `donald_t` and `jaroslaw_k` and includes `kuba_g`, `michal_z`, and `michal_s`. `T1` must contain Bartek, Nina, and exactly two additional `work`-group guests.
 
 ## Optional Agent Configuration
 
@@ -32,12 +41,12 @@ The output must conform exactly to [contract/output-schema.json](../../../contra
 ```json
 {
   "tables": [
-    { "tableId": "T1", "guests": ["bartek", "nina", "...four IDs..."] }
+    { "tableId": "T1", "guests": ["bartek", "nina", "...four or five IDs..."] }
   ]
 }
 ```
 
-No additional properties are emitted. Every input guest ID appears exactly once; each input table appears once with six IDs. `T1` contains Bartek and Nina.
+No additional properties are emitted. Every input guest ID appears exactly once; four tables contain six IDs and one solver-selected table contains seven. `T1` contains Bartek, Nina, and exactly two other `work`-group guests. The selected seven-seat table maximizes the documented policy objective; equal results use canonical lexical ordering.
 
 ## Exit Behavior
 

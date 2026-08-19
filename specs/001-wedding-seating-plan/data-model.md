@@ -6,8 +6,16 @@
 |---|---|---|
 | `scenario` | `String` | Preserved as input metadata; not emitted in the plan. |
 | `title` | `String` | Preserved as input metadata; not emitted in the plan. |
-| `tables` | `[VenueTable]` | Exactly five entries with distinct IDs `T1` through `T5`; each capacity is six. |
-| `guests` | `[Guest]` | Exactly 30 entries with unique, non-empty IDs. |
+| `extraSeatPolicy` | `ExtraSeatPolicy` | Scenario 2 authorization for exactly one chair, addable to any base table. |
+| `tables` | `[VenueTable]` | Exactly five entries with distinct IDs `T1` through `T5`; each base capacity is six. |
+| `guests` | `[Guest]` | Exactly 31 active entries with unique, non-empty IDs. |
+
+## ExtraSeatPolicy
+
+| Field | Type | Rules |
+|---|---|---|
+| `extraSeats` | `Int` | Must equal one for Scenario 2. |
+| `canBeAddedToAnyTable` | `Bool` | Must be `true`; the solver evaluates every table as the expanded table. |
 
 ## VenueTable
 
@@ -15,7 +23,7 @@
 |---|---|---|
 | `id` | `String` | Unique table identifier; `T1` must exist. |
 | `name` | `String` | Human-readable input metadata. |
-| `capacity` | `Int` | Must equal six. |
+| `capacity` | `Int` | Base capacity; must equal six. The final plan may add the authorized chair to exactly one table. |
 | `notes` | `String` | Optional location evidence; `T2` is dance-floor and `T4` is exit/terrace evidence. |
 
 ## Guest
@@ -39,6 +47,8 @@
 
 Policies are evaluated in priority order. Structural and mandatory rules must hold. Explicit named separation and companion rules are hard constraints. Location, evidence-backed named-pair avoidance, food/drink affinity, and group rules contribute only to the ordered preference score. `PolicyAssistant` candidates must additionally contain only known IDs, an allowed `kind`/`priority` combination, and an exact evidence span; candidates failing any check are discarded.
 
+The Scenario 2 built-in catalogue adds soft avoidance for `leszek` with `kuba_g` and `michal_z`, plus a work-cluster penalty when either newcomer shares a table with four or more work-group guests. It does not derive a policy from Michał S.'s Bald Club history. The mandatory `T1` composition is Bartek, Nina, and exactly two other `work` guests.
+
 ## SeatingPlan
 
 | Field | Type | Rules |
@@ -50,7 +60,7 @@ Policies are evaluated in priority order. Structural and mandatory rules must ho
 | Field | Type | Rules |
 |---|---|---|
 | `tableId` | `String` | An ID from `SeatingScenario.tables`. |
-| `guests` | `[String]` | Exactly six distinct input guest IDs, sorted lexicographically for canonical output. |
+| `guests` | `[String]` | Six distinct input guest IDs at four tables and seven at exactly one selected table; each list is sorted lexicographically for canonical output. |
 
 ## State Transitions
 
