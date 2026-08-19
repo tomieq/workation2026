@@ -42,7 +42,7 @@ A wedding organizer receives a complete plan that uses the supplied guest groups
 
 **Acceptance Scenarios**:
 
-1. **Given** a scenario whose guest descriptions explicitly identify compatible companions or shared interests, **When** a feasible table assignment can keep them together, **Then** the plan places them at the same table.
+1. **Given** a scenario whose guest description unambiguously names a compatible companion, **When** a feasible table assignment can keep them together, **Then** the plan places them at the same table.
 2. **Given** a scenario whose descriptions explicitly identify a high-risk conversational combination, **When** a feasible assignment can separate those guests, **Then** the plan assigns them to different tables.
 3. **Given** guest descriptions indicating a preference for dancing, quiet conversation, food, or early departure, **When** a venue table has a relevant location note, **Then** the plan uses that location note when it does not conflict with a higher-priority seating constraint.
 4. **Given** the workation team lists in the challenge brief, **When** the organizer generates a seating plan, **Then** the plan does not treat those lists as wedding seating requirements.
