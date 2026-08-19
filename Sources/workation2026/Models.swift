@@ -3,8 +3,28 @@ import Foundation
 struct SeatingScenario: Codable, Equatable {
     let scenario: String
     let title: String
+    let extraSeatPolicy: ExtraSeatPolicy?
     let tables: [VenueTable]
     let guests: [Guest]
+
+    init(
+        scenario: String,
+        title: String,
+        extraSeatPolicy: ExtraSeatPolicy? = nil,
+        tables: [VenueTable],
+        guests: [Guest]
+    ) {
+        self.scenario = scenario
+        self.title = title
+        self.extraSeatPolicy = extraSeatPolicy
+        self.tables = tables
+        self.guests = guests
+    }
+}
+
+struct ExtraSeatPolicy: Codable, Equatable {
+    let extraSeats: Int
+    let canBeAddedToAnyTable: Bool
 }
 
 struct VenueTable: Codable, Equatable {
@@ -27,6 +47,7 @@ enum SeatingPolicyKind: String, Codable, CaseIterable {
     case companion
     case locationPreference
     case avoidancePreference
+    case workClusterAvoidance
     case affinityPreference
     case groupPreference
 }

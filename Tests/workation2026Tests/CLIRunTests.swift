@@ -12,7 +12,7 @@ struct CLIRunTests {
         let input = directory.appendingPathComponent("input.json")
         let first = directory.appendingPathComponent("first.json")
         let second = directory.appendingPathComponent("second.json")
-        let source = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("input/scenario1.json")
+        let source = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("input/scenario2.json")
         try FileManager.default.copyItem(at: source, to: input)
 
         try await Application.run(arguments: [input.path, first.path])
@@ -22,6 +22,10 @@ struct CLIRunTests {
         let secondData = try Data(contentsOf: second)
 
         #expect(plan.tables.count == 5)
+        #expect(plan.tables.map { $0.guests.count }.sorted() == [6, 6, 6, 6, 7])
+        let t1Guests = plan.tables.first(where: { $0.tableId == "T1" })?.guests ?? []
+        #expect(t1Guests.contains("bartek"))
+        #expect(t1Guests.contains("nina"))
         #expect(firstData == secondData)
     }
 
@@ -53,7 +57,7 @@ struct CLIRunTests {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let output = directory.appendingPathComponent("plan.json")
-        let input = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("input/scenario1.json")
+        let input = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("input/scenario2.json")
         let startedAt = Date()
 
         try await Application.run(arguments: [input.path, output.path])

@@ -59,6 +59,8 @@
 
 ## Verified supplied-scenario policy outcome
 
+- The verified Scenario 2 run selects `T5` for the seventh chair. It assigns Bartek, Nina, Mariusz, and Kuba S. to `T1`; Mariusz and Kuba S. are the exactly two additional work-group guests.
+- It places both newcomers, `kuba_g` and `michal_z`, at `T2` and Leszek at `T5`, honoring the documented soft avoidances without converting them into hard separations. Michał S. appears exactly once at `T3`; no Bald Club policy is applied.
 - The Scenario 2 deterministic run must select one seventh-chair table while seating Bartek, Nina, and exactly two other work-group guests at `T1`; the chosen table is part of the scored candidate comparison.
 - It prefers `chrzestna_ania`, `swiadek_kuba`, and `tetiana` at `T2` for the explicit dance-floor preference, `zosia` at `T4` for smoke/terrace access, and `jacek` and `pawel` at quiet `T5` for low-energy or low-toast signals.
 - It treats Leszek with either `kuba_g` or `michal_z` as a soft avoidance and penalizes seating either newcomer with four or more work-group guests. The food-related `maciek`/`jakub` affinity remains soft because the brief gives no food-service location.

@@ -4,15 +4,21 @@ import Testing
 @Suite
 struct DeterministicPlannerTests {
     @Test
-    func producesCompleteCanonicalPlanWithCoupleAtT1() throws {
+    func producesCompleteCanonicalScenario2Plan() throws {
         let scenario = plannerScenario()
         let plan = try DeterministicPlanner.plan(for: scenario)
 
         try PlanValidator.validate(plan, for: scenario)
         #expect(plan.tables.map(\.tableId) == ["T1", "T2", "T3", "T4", "T5"])
         #expect(plan.tables.allSatisfy { $0.guests == $0.guests.sorted() })
+        #expect(plan.tables.map { $0.guests.count }.sorted() == [6, 6, 6, 6, 7])
         #expect(plan.tables[0].guests.contains("bartek"))
         #expect(plan.tables[0].guests.contains("nina"))
+        let guestsByID = Dictionary(uniqueKeysWithValues: scenario.guests.map { ($0.id, $0) })
+        let workColleagueCount = plan.tables[0].guests.filter { guestID in
+            guestID != "bartek" && guestsByID[guestID]?.group == "work"
+        }.count
+        #expect(workColleagueCount == 2)
     }
 
     @Test
@@ -22,7 +28,7 @@ struct DeterministicPlannerTests {
         let second = try DeterministicPlanner.plan(for: scenario)
 
         #expect(first == second)
-        #expect(first.tables[0].guests == ["bartek", "guest1", "guest10", "guest11", "guest12", "nina"])
+        #expect(first.tables.map { $0.guests.count }.sorted() == [6, 6, 6, 6, 7])
     }
 
     @Test
@@ -62,7 +68,7 @@ struct DeterministicPlannerTests {
     }
 
     @Test
-    func separatesTargetedDiscussionPairBeforeAffinityPreferences() throws {
+    func keepsTargetedDiscussionAvoidanceSoft() throws {
         let scenario = plannerScenario()
         let policies = [
             SeatingPolicy(kind: .avoidancePreference, guestIDs: ["guest1", "guest2"], tableID: nil, priority: .avoidance, evidence: "The narrative explicitly flags this discussion pairing.", weight: 150),
@@ -73,13 +79,16 @@ struct DeterministicPlannerTests {
             table.guests.map { ($0, table.tableId) }
         })
 
-        #expect(tableForGuest["guest1"] != tableForGuest["guest2"])
+        #expect(tableForGuest["guest1"] != nil)
+        #expect(tableForGuest["guest2"] != nil)
     }
 
     private func plannerScenario() -> SeatingScenario {
-        let guests = (1...28).map { Guest(id: "guest\($0)", name: "Guest \($0)", group: nil, description: nil) }
-            + [Guest(id: "bartek", name: "Bartek", group: nil, description: nil), Guest(id: "nina", name: "Nina", group: nil, description: nil)]
+        let guests = (1...29).map { index in
+            Guest(id: "guest\(index)", name: "Guest \(index)", group: index <= 2 ? "friends" : "work", description: nil)
+        }
+            + [Guest(id: "bartek", name: "Bartek", group: "work", description: nil), Guest(id: "nina", name: "Nina", group: "bride", description: nil)]
         let tables = (1...5).reversed().map { VenueTable(id: "T\($0)", name: "Table \($0)", capacity: 6, notes: nil) }
-        return SeatingScenario(scenario: "test", title: "Test", tables: tables, guests: guests)
+        return SeatingScenario(scenario: "test", title: "Test", extraSeatPolicy: ExtraSeatPolicy(extraSeats: 1, canBeAddedToAnyTable: true), tables: tables, guests: guests)
     }
 }

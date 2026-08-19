@@ -4,7 +4,10 @@ enum ScenarioValidationError: Error, Equatable, CustomStringConvertible {
     case invalidTableCount(Int)
     case invalidTableIDs
     case invalidTableCapacity(tableID: String, capacity: Int)
+    case invalidExtraSeatPolicy
     case invalidGuestCount(Int)
+    case invalidActiveRoster
+    case insufficientWorkColleagues
     case blankGuestID
     case duplicateGuestID(String)
     case missingMandatoryGuest(String)
@@ -17,8 +20,14 @@ enum ScenarioValidationError: Error, Equatable, CustomStringConvertible {
             return "Expected distinct table IDs T1 through T5."
         case let .invalidTableCapacity(tableID, capacity):
             return "Table \(tableID) must have capacity 6, found \(capacity)."
+        case .invalidExtraSeatPolicy:
+            return "Scenario 2 requires exactly one extra seat that can be added to any table."
         case let .invalidGuestCount(count):
-            return "Expected exactly 30 guests, found \(count)."
+            return "Expected exactly 31 guests, found \(count)."
+        case .invalidActiveRoster:
+            return "Scenario 2 guest roster does not match the approved active attendees."
+        case .insufficientWorkColleagues:
+            return "Scenario 2 requires at least two work-group guests besides Bartek."
         case .blankGuestID:
             return "Guest IDs must be non-empty."
         case let .duplicateGuestID(id):
@@ -32,17 +41,21 @@ enum ScenarioValidationError: Error, Equatable, CustomStringConvertible {
 enum PlanValidationError: Error, Equatable, CustomStringConvertible {
     case invalidTableIDs
     case invalidTableSize(tableID: String, count: Int)
+    case invalidExtraSeatDistribution
     case duplicateGuestID(String)
     case unknownGuestID(String)
     case missingGuestID(String)
     case mandatoryGuestNotAtT1(String)
+    case invalidT1WorkColleagueCount(Int)
 
     var description: String {
         switch self {
         case .invalidTableIDs:
             return "Plan must contain exactly the input table IDs."
         case let .invalidTableSize(tableID, count):
-            return "Table \(tableID) must contain 6 guests, found \(count)."
+            return "Table \(tableID) has an invalid guest count of \(count)."
+        case .invalidExtraSeatDistribution:
+            return "Plan must contain four six-guest tables and one seven-guest table."
         case let .duplicateGuestID(id):
             return "Guest ID \(id) appears more than once in the plan."
         case let .unknownGuestID(id):
@@ -51,6 +64,8 @@ enum PlanValidationError: Error, Equatable, CustomStringConvertible {
             return "Plan is missing guest ID \(id)."
         case let .mandatoryGuestNotAtT1(id):
             return "Mandatory guest \(id) must be seated at T1."
+        case let .invalidT1WorkColleagueCount(count):
+            return "T1 must contain exactly two work-group guests besides Bartek, found \(count)."
         }
     }
 }
@@ -80,7 +95,11 @@ enum ScenarioValidator {
         for table in scenario.tables where table.capacity != 6 {
             throw ScenarioValidationError.invalidTableCapacity(tableID: table.id, capacity: table.capacity)
         }
-        guard scenario.guests.count == 30 else {
+        guard scenario.extraSeatPolicy?.extraSeats == 1,
+              scenario.extraSeatPolicy?.canBeAddedToAnyTable == true else {
+            throw ScenarioValidationError.invalidExtraSeatPolicy
+        }
+        guard scenario.guests.count == 31 else {
             throw ScenarioValidationError.invalidGuestCount(scenario.guests.count)
         }
 
@@ -96,6 +115,18 @@ enum ScenarioValidator {
         for mandatoryID in ["bartek", "nina"] where !guestIDs.contains(mandatoryID) {
             throw ScenarioValidationError.missingMandatoryGuest(mandatoryID)
         }
+        let workColleagues = scenario.guests.filter { $0.id != "bartek" && $0.group == "work" }
+        guard workColleagues.count >= 2 else {
+            throw ScenarioValidationError.insufficientWorkColleagues
+        }
+        if scenario.scenario == "scenario2" {
+            let requiredRoster: Set<String> = [
+                "mama_ela", "oliwia", "babcia_ela", "piotr", "agnieszka", "zdzisiek", "chrzestna_ania", "zosia", "gosia", "amelka", "ada", "kacper", "klara", "jacek", "swiadek_kuba", "przemek", "pawel", "leszek", "mariusz", "tomek", "slawek_m", "maciek", "michal", "jakub", "tetiana", "kuba_s", "bartek", "nina", "kuba_g", "michal_z", "michal_s",
+            ]
+            guard guestIDs == requiredRoster else {
+                throw ScenarioValidationError.invalidActiveRoster
+            }
+        }
     }
 }
 
@@ -109,8 +140,13 @@ enum PlanValidator {
 
         let expectedGuestIDs = Set(scenario.guests.map(\.id))
         var assignedGuestIDs = Set<String>()
+        let sevenSeatTables = plan.tables.filter { $0.guests.count == 7 }
+        guard sevenSeatTables.count == 1,
+              plan.tables.filter({ $0.guests.count == 6 }).count == 4 else {
+            throw PlanValidationError.invalidExtraSeatDistribution
+        }
         for table in plan.tables {
-            guard table.guests.count == 6 else {
+            guard table.guests.count == 6 || table.guests.count == 7 else {
                 throw PlanValidationError.invalidTableSize(tableID: table.tableId, count: table.guests.count)
             }
             for guestID in table.guests {
@@ -128,6 +164,11 @@ enum PlanValidator {
         let t1Guests = plan.tables.first(where: { $0.tableId == "T1" })?.guests ?? []
         for mandatoryID in ["bartek", "nina"] where !t1Guests.contains(mandatoryID) {
             throw PlanValidationError.mandatoryGuestNotAtT1(mandatoryID)
+        }
+        let guestsByID = Dictionary(uniqueKeysWithValues: scenario.guests.map { ($0.id, $0) })
+        let workColleagueCount = t1Guests.filter { $0 != "bartek" && guestsByID[$0]?.group == "work" }.count
+        guard workColleagueCount == 2 else {
+            throw PlanValidationError.invalidT1WorkColleagueCount(workColleagueCount)
         }
     }
 }

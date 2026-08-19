@@ -5,6 +5,18 @@ import Testing
 @Suite
 struct ValidationTests {
     @Test
+    func acceptsCanonicalScenario2Fixture() throws {
+        let input = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("input/scenario2.json")
+        let scenario = try JSONDecoder().decode(SeatingScenario.self, from: Data(contentsOf: input))
+
+        try ScenarioValidator.validate(scenario)
+    }
+
+    @Test
     func rejectsDuplicateGuestIDs() {
         var scenario = validScenario()
         scenario = SeatingScenario(
@@ -16,6 +28,39 @@ struct ValidationTests {
 
         #expect(throws: ScenarioValidationError.self) {
             try ScenarioValidator.validate(scenario)
+        }
+    }
+
+    @Test
+    func rejectsInvalidExtraSeatAuthorization() throws {
+        let scenario = try scenario2()
+        let invalidScenario = SeatingScenario(
+            scenario: scenario.scenario,
+            title: scenario.title,
+            extraSeatPolicy: ExtraSeatPolicy(extraSeats: 0, canBeAddedToAnyTable: true),
+            tables: scenario.tables,
+            guests: scenario.guests
+        )
+
+        #expect(throws: ScenarioValidationError.invalidExtraSeatPolicy) {
+            try ScenarioValidator.validate(invalidScenario)
+        }
+    }
+
+    @Test
+    func rejectsSupersededScenario2Roster() throws {
+        let scenario = try scenario2()
+        let guests = Array(scenario.guests.dropLast()) + [Guest(id: "donald_t", name: "Donald T.", group: "politics", description: nil)]
+        let invalidScenario = SeatingScenario(
+            scenario: scenario.scenario,
+            title: scenario.title,
+            extraSeatPolicy: scenario.extraSeatPolicy,
+            tables: scenario.tables,
+            guests: guests
+        )
+
+        #expect(throws: ScenarioValidationError.invalidActiveRoster) {
+            try ScenarioValidator.validate(invalidScenario)
         }
     }
 
@@ -51,6 +96,15 @@ struct ValidationTests {
             + [Guest(id: "bartek", name: "Bartek", group: nil, description: nil), Guest(id: "nina", name: "Nina", group: nil, description: nil)]
         let tables = (1...5).map { VenueTable(id: "T\($0)", name: "Table \($0)", capacity: 6, notes: nil) }
         return SeatingScenario(scenario: "test", title: "Test", tables: tables, guests: guests)
+    }
+
+    private func scenario2() throws -> SeatingScenario {
+        let input = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("input/scenario2.json")
+        return try JSONDecoder().decode(SeatingScenario.self, from: Data(contentsOf: input))
     }
 }
 
