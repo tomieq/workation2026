@@ -26,6 +26,8 @@
 - The named Leszek--Michał Z. and Leszek--Jakub G. tensions are soft discussion-pair avoidances. They do not create hard separation rules because the narrative describes avoidable awkwardness rather than an impossibility of sharing a table.
 - Jakub G. and Michał Z. prefer social company over spending the evening in a work-team cluster. This is a soft preference and does not override higher-priority structural or named-person rules.
 - Michał S.'s former membership in the Bald Club is social context only; it does not name a required companion, a required separation, or a measurable seating preference.
+- `T1` must include exactly two active work-group guests in addition to Bartek; Bartek is not counted as one of those colleagues.
+- `input/scenario2.json` is the canonical supplied fixture for validating the updated program.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -35,7 +37,7 @@ A wedding organizer supplies one scenario containing the available tables and al
 
 **Why this priority**: A complete, structurally valid plan is the minimum usable result; no seating-quality decision matters if a guest is missing, duplicated, or seated at a nonexistent table.
 
-**Independent Test**: Run the program with the supplied 31-guest Scenario 2 data and validate the generated file against the published output schema and all seating invariants.
+**Independent Test**: Run the program with `input/scenario2.json` and validate the generated file against the published output schema and all seating invariants.
 
 **Acceptance Scenarios**:
 
@@ -62,6 +64,7 @@ A wedding organizer receives a complete plan that uses the supplied guest groups
 5. **Given** a guest whose description explicitly indicates dancing or smoke/terrace breaks, **When** the relevant venue table is available after higher-priority constraints, **Then** the plan prefers `T2` for dancing and `T4` for smoke/terrace breaks.
 6. **Given** the Scenario 2 roster, **When** a valid alternative exists after higher-priority constraints, **Then** Michał Z. and Jakub G. are not seated with Leszek and are not placed at a table dominated by work-team guests.
 7. **Given** the Scenario 2 roster, **When** the organizer generates a plan, **Then** Michał S. is included exactly once and the plan does not turn the Bald Club history into a mandatory companion or separation rule.
+8. **Given** a valid Scenario 2 roster with at least two work-group guests other than Bartek, **When** the organizer generates a plan, **Then** `T1` contains Bartek, Nina, and exactly two additional guests whose group is `work`.
 
 ---
 
@@ -85,6 +88,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 
 - The scenario does not contain exactly five tables, contains any capacity other than six or seven, has more or fewer than one seven-seat table, or has a total capacity other than 31: generation fails because the Scenario 2 venue is fixed at four tables of six and one table of seven.
 - A Scenario 2 roster includes Donald T. or Jarosław K., omits Jakub G., Michał Z., or Michał S., or contains a guest other than the 31 active attendees: generation fails rather than silently generating a plan for a superseded guest list.
+- Fewer than two active work-group guests other than Bartek are available: generation fails because the mandatory `T1` composition cannot be satisfied.
 - A guest's group or description is absent or blank: the guest remains eligible for assignment, but no preference is inferred from the missing field.
 - Several seating preferences cannot all be honored because of capacity or mandatory placement: the plan preserves structural and mandatory constraints first, then applies the documented priority order.
 - An input table ID, guest ID, or description contains Polish characters, punctuation, or quotation marks: the plan preserves the corresponding guest IDs and remains valid JSON.
@@ -101,17 +105,17 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-005**: The system MUST assign every input guest exactly once and MUST NOT introduce a guest ID absent from the input.
 - **FR-006**: The system MUST assign Bartek and Nina to `T1`.
 - **FR-007**: The system MUST write a result that conforms to the published wedding seating output schema and contains no additional output fields.
-- **FR-008**: The system MUST use a documented seating-policy catalogue derived from explicit signals in guest groups, guest descriptions, and table-location notes; it MUST NOT derive seating rules from workation team membership or unstated organizer intent.
-- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, location preferences, explicit named discussion-pair avoidance, explicit food/drink affinities, then group-membership preferences.
+- **FR-008**: The system MUST use a documented seating-policy catalogue derived from explicit signals in guest groups, guest descriptions, table-location notes, and approved change requests; it MUST NOT derive additional seating rules from workation team membership or unstated organizer intent.
+- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory `T1` composition, explicit guest separation rules, explicit companion rules, location preferences, explicit named discussion-pair avoidance, explicit food/drink affinities, then group-membership preferences.
 - **FR-010**: The system MUST produce the same plan for identical valid input.
 - **FR-011**: The system MUST report input-validation and output-writing failures clearly, MUST publish a new output plan only after successful validation, and MUST leave any existing output file unchanged after a failed run.
 - **FR-012**: Only an unambiguous narrative reference that names another guest may create a hard companion or separation rule; shared traits and table-location cues are soft preferences.
-- **FR-013**: The system MAY use supplied guest group membership as the lowest-priority soft preference only after all higher-priority seating constraints and preferences are satisfied.
+- **FR-013**: Except for the mandatory `T1` composition, the system MAY use supplied guest group membership as the lowest-priority soft preference only after all higher-priority seating constraints and preferences are satisfied.
 - **FR-014**: When multiple plans satisfy the same seating constraints and preferences, the system MUST choose the lexicographically smallest arrangement by table ID and then guest ID.
 - **FR-015**: The system MUST treat `T2` as nearest the dance floor and `T4` as nearest the exit/terrace. After higher-priority constraints, it MUST prefer `T2` for guests whose descriptions explicitly indicate dancing and `T4` for guests whose descriptions explicitly indicate smoke or terrace breaks.
 - **FR-016**: When no relevant food or bar table location is supplied, the system MUST treat only explicit food- or drink-related descriptions as a soft affinity among those named guests. It MUST prefer quiet `T5` for explicit low-energy, early-departure, or low-toast signals when feasible.
 - **FR-017**: The system MUST use a documented soft avoidance score for an explicitly flagged discussion pair. The score MUST NOT create a hard separation or override structural, mandatory, companion, or separation constraints.
-- **FR-018**: The system MUST prefer the named godmother and witness plus one work-group contact for the optional seats at the couple's table when feasible. This preference MUST remain soft and MUST take precedence over ordinary venue-location preferences; it MUST NOT cluster multiple work-group guests at `T1`.
+- **FR-018**: The system MUST assign Bartek and Nina to `T1` together with exactly two additional active guests whose group is `work`; Bartek does not count toward those two colleagues. This is a mandatory composition rule and takes precedence over all soft seating preferences.
 - **FR-019**: The system MUST reject a Scenario 2 roster that includes Donald T. or Jarosław K. or that omits Jakub G., Michał Z., or Michał S.
 - **FR-020**: After structural validity, mandatory couple placement, and any explicit hard companion or separation rules, the system MUST treat the Leszek--Michał Z. and Leszek--Jakub G. combinations as soft discussion-pair avoidances and MUST prefer not to place either newcomer at a table dominated by work-team guests.
 - **FR-021**: The system MUST NOT infer a mandatory companion, separation, or table placement for Michał S. from the Bald Club narrative alone.
@@ -128,20 +132,21 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 
 ### Measurable Outcomes
 
-- **SC-001**: For every valid Scenario 2 input, 100% of generated plans contain five tables with four groups of six guests and one group of seven guests, assign all 31 active guests exactly once, and place Bartek and Nina at `T1`.
+- **SC-001**: For every valid Scenario 2 input, 100% of generated plans contain five tables with four groups of six guests and one group of seven guests, assign all 31 active guests exactly once, and place Bartek and Nina plus exactly two of Bartek's work-group colleagues at `T1`.
 - **SC-002**: 100% of generated plans validate against the published output schema with no additional properties.
 - **SC-003**: Repeating generation 20 times with unchanged valid input produces 20 identical seating plans.
-- **SC-004**: The supplied 31-guest Scenario 2 input produces a plan or a clear validation failure within 10 seconds on the challenge machine.
+- **SC-004**: The supplied `input/scenario2.json` fixture produces a plan or a clear validation failure within 10 seconds on the challenge machine.
 - **SC-005**: In review of the supplied scenario, all documented high-priority seating policies are honored; any lower-priority policy not honored is accompanied by a capacity or higher-priority conflict explanation in the project artifacts.
 - **SC-006**: A reviewer can complete the primary workflow, from a valid scenario to a schema-valid plan, on the first attempt using the documented command and without manual JSON editing.
 - **SC-007**: Given an input with more than one equally preferred valid plan, generation selects the lexicographically smallest arrangement by table ID and then guest ID in 100% of runs.
 
 ## Assumptions
 
-- The input follows the scenario structure represented by `input/scenario1.json`, including tables and guests with stable IDs.
+- The updated program's canonical scenario fixture is `input/scenario2.json`; it follows the existing scenario structure and contains tables and guests with stable IDs.
 - The Scenario 2 venue is fixed at five tables: four tables of six and exactly one table of seven; alternate room sizes and more than one added chair are outside this feature's scope.
 - The Scenario 2 active roster is exactly the 31 guests after removing Donald T. and Jarosław K. and adding Jakub G., Michał Z., and Michał S.
 - Bartek and Nina are identified by their guest IDs or names in the input scenario and must always be seated at `T1`.
+- Bartek's colleagues are guests whose group is `work`; Bartek is excluded when counting the exactly two work-group colleagues required at `T1`.
 - The public challenge brief, scenario descriptions, and table notes are the sole business evidence for seating-policy decisions; workation team composition is explicitly excluded.
 - A later clarification and technical plan will publish the complete seating-policy catalogue and explain any unavoidable policy trade-offs without adding private organizer knowledge.
 - The output file uses guest IDs, not display names, because the published output contract defines each seat occupant as a string and IDs uniquely identify input guests.
