@@ -100,6 +100,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-015**: The system MUST treat `T2` as nearest the dance floor and `T4` as nearest the exit/terrace. After higher-priority constraints, it MUST prefer `T2` for guests whose descriptions explicitly indicate dancing and `T4` for guests whose descriptions explicitly indicate smoke or terrace breaks.
 - **FR-016**: When no relevant food or bar table location is supplied, the system MUST treat only explicit food- or drink-related descriptions as a soft affinity among those named guests. It MUST prefer quiet `T5` for explicit low-energy, early-departure, or low-toast signals when feasible.
 - **FR-017**: The system MUST use a documented soft avoidance score for an explicitly flagged discussion pair. The score MUST NOT create a hard separation or override structural, mandatory, companion, or separation constraints.
+- **FR-018**: The system MUST prefer the named mother, grandmother, godmother, and witness for the four optional seats at the couple's table when feasible. This ceremonial-role preference MUST remain soft and MUST take precedence over ordinary venue-location preferences.
 
 ### Key Entities *(include if feature involves data)*
 
