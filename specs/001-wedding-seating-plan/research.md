@@ -42,7 +42,8 @@
 |---|---|---:|---|
 | Mariusz explicitly likes Sławek M. | Companion: `mariusz` + `slawek_m` | Hard companion | An explicit named positive relationship. |
 | Jarosław names Donald and Sławek as a likely political-panel combination | Separate: `donald_t` + `jaroslaw_k`; `jaroslaw_k` + `slawek_m` | Hard separation | Explicit named high-risk conversation combinations. |
-| Mama Ela, Babcia Ela, Chrzestna Ania, and Świadek Kuba are the named mother, grandmother, godmother, and witness | Prefer `T1` | 20000 | The four ceremonial family roles fill the optional seats beside the couple before companion ordering and ordinary venue preferences. |
+| Chrzestna Ania and Świadek Kuba are the named godmother and witness | Prefer `T1` | 20000 | Ceremonial support at the couple's table takes precedence over ordinary venue preferences. |
+| Mariusz is Bartek's work-group contact and must accompany Sławek through their explicit relationship | Prefer Mariusz at `T1` | 20000 | Gives Bartek exactly one work-group peer at the couple's table without forming a work cluster. |
 | Ania, Świadek Kuba, and Tetiana are explicitly dance-oriented | Prefer `T2` | 300 | The strongest soft location cue: `T2` is beside the dance floor. |
 | Ania, Gosia, Kacper, Świadek Kuba, and Tetiana explicitly describe a lively, performance, or all-night celebration style | Shared table affinity | 100 per matching tablemate | Keeps compatible active participants together without forcing placement. |
 | Zosia explicitly seeks smoke breaks | Prefer `T4` | 300 | The strongest soft location cue: `T4` is beside the exit/terrace. |

@@ -116,6 +116,7 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 - [X] T031 Map explicitly described lively evening styles to a soft table-mate affinity in `Sources/workation2026/SeatingPolicy.swift` and document the evidence boundary in `specs/001-wedding-seating-plan/research.md`
 - [X] T032 Add a targeted soft avoidance for the explicitly flagged Donald/Sławek discussion pairing in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, and `Sources/workation2026/DeterministicPlanner.swift`
 - [X] T033 Prioritize the four named ceremonial roles for the optional seats at `T1` in `Sources/workation2026/SeatingPolicy.swift` and document the preference rationale in `specs/001-wedding-seating-plan/research.md`
+- [X] T034 Reserve one `T1` place for Bartek's work-group contact while preventing a work-table cluster in `Sources/workation2026/SeatingPolicy.swift`
 
 ---
 
