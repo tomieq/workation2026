@@ -114,6 +114,7 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 - [X] T029 Extend the documented policy catalogue and solver with soft food/drink affinity and quiet-table preferences in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, and `Sources/workation2026/DeterministicPlanner.swift`
 - [X] T030 Map public-brief special requirements to explicit weighted policies, including named companion/separation and location/affinity preferences, in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, `Sources/workation2026/DeterministicPlanner.swift`, and `specs/001-wedding-seating-plan/research.md`
 - [X] T031 Map explicitly described lively evening styles to a soft table-mate affinity in `Sources/workation2026/SeatingPolicy.swift` and document the evidence boundary in `specs/001-wedding-seating-plan/research.md`
+- [X] T032 Add evidence-backed conversational-volume avoidance to prevent high-volume or debate-prone guests from concentrating at one table in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, and `Sources/workation2026/DeterministicPlanner.swift`
 
 ---
 

@@ -61,6 +61,21 @@ struct DeterministicPlannerTests {
         #expect(tableForGuest["guest3"] == tableForGuest["guest4"])
     }
 
+    @Test
+    func spreadsExplicitlyHighVolumeConversationalGuests() throws {
+        let scenario = plannerScenario()
+        let policies = [
+            SeatingPolicy(kind: .conversationAvoidance, guestIDs: ["guest1", "guest2", "guest3"], tableID: nil, priority: .conversation, evidence: "Each guest is explicitly described as high-volume or debate-prone.", weight: 125),
+        ]
+
+        let plan = try DeterministicPlanner.plan(for: scenario, policies: policies)
+        let tableForGuest = Dictionary(uniqueKeysWithValues: plan.tables.flatMap { table in
+            table.guests.map { ($0, table.tableId) }
+        })
+
+        #expect(Set([tableForGuest["guest1"], tableForGuest["guest2"], tableForGuest["guest3"]]).count == 3)
+    }
+
     private func plannerScenario() -> SeatingScenario {
         let guests = (1...28).map { Guest(id: "guest\($0)", name: "Guest \($0)", group: nil, description: nil) }
             + [Guest(id: "bartek", name: "Bartek", group: nil, description: nil), Guest(id: "nina", name: "Nina", group: nil, description: nil)]
