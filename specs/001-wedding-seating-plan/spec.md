@@ -16,6 +16,7 @@
 - Q: Should the solver treat a guest's group value, such as family or work, as a soft seating preference? -> A: Use group membership as a lowest-priority soft preference.
 - Q: When soft preferences conflict at the same priority, how should the solver choose between equally valid plans? -> A: Choose the lexicographically smallest final table and guest-ID arrangement.
 - Q: If generation fails and the output path already contains an earlier valid plan, should the program keep or delete that existing file? -> A: Keep any existing output unchanged on failure.
+- Q: How should the solver use the confirmed locations of Table 2 by the dance floor and Table 4 by the exit/terrace? -> A: Dance-related descriptions prefer Table 2; smoke/terrace-related descriptions prefer Table 4.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -49,6 +50,7 @@ A wedding organizer receives a complete plan that uses the supplied guest groups
 2. **Given** a scenario whose descriptions explicitly identify a high-risk conversational combination, **When** a feasible assignment can separate those guests, **Then** the plan assigns them to different tables.
 3. **Given** guest descriptions indicating a preference for dancing, quiet conversation, food, or early departure, **When** a venue table has a relevant location note, **Then** the plan uses that location note when it does not conflict with a higher-priority seating constraint.
 4. **Given** the workation team lists in the challenge brief, **When** the organizer generates a seating plan, **Then** the plan does not treat those lists as wedding seating requirements.
+5. **Given** a guest whose description explicitly indicates dancing or smoke/terrace breaks, **When** the relevant venue table is available after higher-priority constraints, **Then** the plan prefers `T2` for dancing and `T4` for smoke/terrace breaks.
 
 ---
 
@@ -94,6 +96,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-012**: Only an unambiguous narrative reference that names another guest may create a hard companion or separation rule; shared traits and table-location cues are soft preferences.
 - **FR-013**: The system MAY use supplied guest group membership as the lowest-priority soft preference only after all higher-priority seating constraints and preferences are satisfied.
 - **FR-014**: When multiple plans satisfy the same seating constraints and preferences, the system MUST choose the lexicographically smallest arrangement by table ID and then guest ID.
+- **FR-015**: The system MUST treat `T2` as nearest the dance floor and `T4` as nearest the exit/terrace. After higher-priority constraints, it MUST prefer `T2` for guests whose descriptions explicitly indicate dancing and `T4` for guests whose descriptions explicitly indicate smoke or terrace breaks.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -123,3 +126,4 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - The public challenge brief, scenario descriptions, and table notes are the sole business evidence for seating-policy decisions; workation team composition is explicitly excluded.
 - A later clarification and technical plan will publish the complete seating-policy catalogue and explain any unavoidable policy trade-offs without adding private organizer knowledge.
 - The output file uses guest IDs, not display names, because the published output contract defines each seat occupant as a string and IDs uniquely identify input guests.
+- The room-layout diagram is public challenge evidence that `T2` is nearest the dance floor and `T4` is nearest the exit/terrace.
