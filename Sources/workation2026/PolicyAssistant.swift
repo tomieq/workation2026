@@ -1,10 +1,11 @@
 import Foundation
+import Env
 import SwiftAgent
 
 enum PolicyAssistant {
     static func proposedPolicies(
         for scenario: SeatingScenario,
-        environment: [String: String] = ProcessInfo.processInfo.environment
+        environment: [String: String] = environmentValues()
     ) async -> [SeatingPolicy] {
         guard let configuration = Configuration(environment: environment) else { return [] }
         do {
@@ -47,9 +48,12 @@ enum PolicyAssistant {
         let authToken: String?
 
         init?(environment: [String: String]) {
-            guard let providerValue = environment["SWIFT_AGENT_PROVIDER"],
-                  let modelURL = environment["SWIFT_AGENT_MODEL_URL"], !modelURL.isEmpty,
-                  let model = environment["SWIFT_AGENT_MODEL"], !model.isEmpty else { return nil }
+            let providerValue = environment["SWIFT_AGENT_PROVIDER"] ?? "openAI"
+            let modelURL = environment["SWIFT_AGENT_MODEL_URL"] ?? "https://api.openai.com/v1/"
+            let model = environment["SWIFT_AGENT_MODEL"] ?? "gpt-5.4-mini"
+            guard !modelURL.isEmpty,
+                !model.isEmpty,
+                let authToken = environment["SWIFT_AGENT_AUTH_TOKEN"], !authToken.isEmpty else { return nil }
             switch providerValue {
             case "openAI": provider = .openAI
             case "ollama": provider = .ollama
@@ -57,8 +61,16 @@ enum PolicyAssistant {
             }
             self.modelURL = modelURL
             self.model = model
-            authToken = environment["SWIFT_AGENT_AUTH_TOKEN"]
+            self.authToken = authToken
         }
+    }
+
+    private static func environmentValues() -> [String: String] {
+        let env = Env()
+        let keys = ["SWIFT_AGENT_PROVIDER", "SWIFT_AGENT_MODEL_URL", "SWIFT_AGENT_MODEL", "SWIFT_AGENT_AUTH_TOKEN"]
+        return Dictionary(uniqueKeysWithValues: keys.compactMap { key in
+            env.get(key).map { (key, $0) }
+        })
     }
 
     private struct Proposal: Decodable {
