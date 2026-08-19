@@ -32,8 +32,8 @@ enum PolicyAssistant {
         let tables = scenario.tables.map { "\($0.id): \($0.notes ?? "")" }.joined(separator: "\n")
         let guests = scenario.guests.map { "\($0.id): \($0.description ?? "")" }.joined(separator: "\n")
         return """
-        Propose zero or more policies as JSON: {"policies":[{"kind":"companion|separate|locationPreference|affinityPreference","guestIDs":["id"],"tableID":"optional","priority":"companion|separation|location|affinity","evidence":"exact input excerpt"}]}.
-        Use only explicit named references, dance/terrace cues, shared food/drink cues, and exact evidence. Do not invent intent.
+        Propose zero or more policies as JSON: {"policies":[{"kind":"companion|separate|locationPreference|avoidancePreference|affinityPreference","guestIDs":["id"],"tableID":"optional","priority":"companion|separation|location|avoidance|affinity","evidence":"exact input excerpt"}]}.
+        Use only explicit named references, dance/terrace cues, shared food/drink cues, or explicitly flagged discussion pairings with exact evidence. Do not invent intent.
         Tables:
         \(tables)
         Guests:
@@ -100,6 +100,7 @@ private extension SeatingPolicyPriority {
         case "separation": self = .separation
         case "companion": self = .companion
         case "location": self = .location
+        case "avoidance": self = .avoidance
         case "affinity": self = .affinity
         case "group": self = .group
         default: return nil

@@ -61,6 +61,21 @@ struct DeterministicPlannerTests {
         #expect(tableForGuest["guest3"] == tableForGuest["guest4"])
     }
 
+    @Test
+    func separatesTargetedDiscussionPairBeforeAffinityPreferences() throws {
+        let scenario = plannerScenario()
+        let policies = [
+            SeatingPolicy(kind: .avoidancePreference, guestIDs: ["guest1", "guest2"], tableID: nil, priority: .avoidance, evidence: "The narrative explicitly flags this discussion pairing.", weight: 150),
+        ]
+
+        let plan = try DeterministicPlanner.plan(for: scenario, policies: policies)
+        let tableForGuest = Dictionary(uniqueKeysWithValues: plan.tables.flatMap { table in
+            table.guests.map { ($0, table.tableId) }
+        })
+
+        #expect(tableForGuest["guest1"] != tableForGuest["guest2"])
+    }
+
     private func plannerScenario() -> SeatingScenario {
         let guests = (1...28).map { Guest(id: "guest\($0)", name: "Guest \($0)", group: nil, description: nil) }
             + [Guest(id: "bartek", name: "Bartek", group: nil, description: nil), Guest(id: "nina", name: "Nina", group: nil, description: nil)]

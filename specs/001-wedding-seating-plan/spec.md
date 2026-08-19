@@ -91,7 +91,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-006**: The system MUST assign Bartek and Nina to `T1`.
 - **FR-007**: The system MUST write a result that conforms to the published wedding seating output schema and contains no additional output fields.
 - **FR-008**: The system MUST use a documented seating-policy catalogue derived from explicit signals in guest groups, guest descriptions, and table-location notes; it MUST NOT derive seating rules from workation team membership or unstated organizer intent.
-- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, location preferences, explicit food/drink affinities, then group-membership preferences.
+- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, location preferences, explicit named discussion-pair avoidance, explicit food/drink affinities, then group-membership preferences.
 - **FR-010**: The system MUST produce the same plan for identical valid input.
 - **FR-011**: The system MUST report input-validation and output-writing failures clearly, MUST publish a new output plan only after successful validation, and MUST leave any existing output file unchanged after a failed run.
 - **FR-012**: Only an unambiguous narrative reference that names another guest may create a hard companion or separation rule; shared traits and table-location cues are soft preferences.
@@ -99,13 +99,14 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-014**: When multiple plans satisfy the same seating constraints and preferences, the system MUST choose the lexicographically smallest arrangement by table ID and then guest ID.
 - **FR-015**: The system MUST treat `T2` as nearest the dance floor and `T4` as nearest the exit/terrace. After higher-priority constraints, it MUST prefer `T2` for guests whose descriptions explicitly indicate dancing and `T4` for guests whose descriptions explicitly indicate smoke or terrace breaks.
 - **FR-016**: When no relevant food or bar table location is supplied, the system MUST treat only explicit food- or drink-related descriptions as a soft affinity among those named guests. It MUST prefer quiet `T5` for explicit low-energy, early-departure, or low-toast signals when feasible.
+- **FR-017**: The system MUST use a documented soft avoidance score for an explicitly flagged discussion pair. The score MUST NOT create a hard separation or override structural, mandatory, companion, or separation constraints.
 
 ### Key Entities *(include if feature involves data)*
 
 - **Seating Scenario**: The supplied wedding data set containing its identifier, tables, and guests.
 - **Table**: A venue location with an ID, display name, capacity, and location note that may affect seating preferences.
 - **Guest**: An invited person identified by a unique ID, display name, group, and narrative description.
-- **Seating Policy**: A documented, evidence-backed rule that expresses a mandatory placement, separation, companion, or location preference and its priority.
+- **Seating Policy**: A documented, evidence-backed rule that expresses a mandatory placement, separation, companion, location preference, or named-pair avoidance preference and its priority.
 - **Seating Plan**: The generated mapping of each table ID to the six assigned guest IDs.
 
 ## Success Criteria *(mandatory)*

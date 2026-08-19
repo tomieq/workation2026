@@ -11,6 +11,7 @@ enum SeatingPolicyCatalogue {
             SeatingPolicy(kind: .locationPreference, guestIDs: ["chrzestna_ania", "swiadek_kuba", "tetiana"], tableID: "T2", priority: .location, evidence: "Descriptions explicitly mention dancing or the dance floor.", weight: 300),
             SeatingPolicy(kind: .locationPreference, guestIDs: ["zosia"], tableID: "T4", priority: .location, evidence: "Description explicitly mentions smoke breaks; T4 is nearest the exit/terrace.", weight: 300),
             SeatingPolicy(kind: .locationPreference, guestIDs: ["jacek", "leszek", "pawel"], tableID: "T5", priority: .location, evidence: "Descriptions explicitly indicate conserving energy or avoiding toast competition; T5 is the quieter area.", weight: 200),
+            SeatingPolicy(kind: .avoidancePreference, guestIDs: ["donald_t", "slawek_m"], tableID: nil, priority: .avoidance, evidence: "Jarosław explicitly identifies Donald and Sławek as part of the high-risk political discussion combination.", weight: 150),
             SeatingPolicy(kind: .affinityPreference, guestIDs: ["chrzestna_ania", "gosia", "kacper", "swiadek_kuba", "tetiana"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly indicate dancing, a performance, or keeping the celebration going.", weight: 100),
             SeatingPolicy(kind: .affinityPreference, guestIDs: ["klara", "przemek", "tomek"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly mention alcohol, spirits, or champagne.", weight: 75),
             SeatingPolicy(kind: .affinityPreference, guestIDs: ["jakub", "maciek"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly describe contrasting eating habits.", weight: 50),
@@ -50,6 +51,8 @@ enum SeatingPolicyCatalogue {
                 return policy.priority == .companion && policy.guestIDs.count == 2 && policy.tableID == nil
             case .locationPreference:
                 return policy.priority == .location && policy.tableID.map(tableIDs.contains) == true
+            case .avoidancePreference:
+                return policy.priority == .avoidance && policy.guestIDs.count == 2 && policy.tableID == nil && policy.weight > 0
             case .affinityPreference:
                 return policy.priority == .affinity && policy.guestIDs.count > 1 && policy.tableID == nil
             case .groupPreference:

@@ -26,6 +26,7 @@ enum SeatingPolicyKind: String, Codable, CaseIterable {
     case separate
     case companion
     case locationPreference
+    case avoidancePreference
     case affinityPreference
     case groupPreference
 }
@@ -36,6 +37,7 @@ enum SeatingPolicyPriority: Int, Codable, Comparable, CaseIterable {
     case separation
     case companion
     case location
+    case avoidance
     case affinity
     case group
 
@@ -75,6 +77,8 @@ private extension SeatingPolicyPriority {
         case .structural, .mandatory, .separation, .companion:
             return 0
         case .location:
+            return 100
+        case .avoidance:
             return 100
         case .affinity:
             return 10
