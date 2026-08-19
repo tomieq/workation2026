@@ -1,0 +1,60 @@
+{
+  "originHash" : "52f73286c151457cb6bf7d61c0532bed1da5476b71ccf48c8f3841e7699fb447",
+  "pins" : [
+    {
+      "identity" : "logger",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomieq/Logger",
+      "state" : {
+        "revision" : "f38104dc91c5af17d930b279ef0f1283d991a28e",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "swift-asn1",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-asn1.git",
+      "state" : {
+        "revision" : "a9a5efd40eaf558a2bcd48d64b1d1646be686008",
+        "version" : "1.7.1"
+      }
+    },
+    {
+      "identity" : "swift-crypto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-crypto.git",
+      "state" : {
+        "revision" : "95ba0316a9b733e92bb6b071255ff46263bbe7dc",
+        "version" : "3.15.1"
+      }
+    },
+    {
+      "identity" : "swiftagent",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomieq/SwiftAgent.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "18a8639d91d5c46c5e9a99184afa788a114ec163"
+      }
+    },
+    {
+      "identity" : "swiftextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomieq/SwiftExtensions",
+      "state" : {
+        "revision" : "f3c8b038ff2d44ec600316cab07326a69b4c79cf",
+        "version" : "2.0.1"
+      }
+    },
+    {
+      "identity" : "webresponse",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomieq/WebResponse",
+      "state" : {
+        "branch" : "master",
+        "revision" : "aabf12befdb510ab8e9c6425a6cf347fb91c3756"
+      }
+    }
+  ],
+  "version" : 3
+}

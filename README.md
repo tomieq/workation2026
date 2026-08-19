@@ -43,12 +43,21 @@ Nie dostajecie gotowej specyfikacji. Z nieformalnego briefu sami musicie wydoby�
 
 > Jeżeli drugą rzeczą będzie `WeddingGuestPlacementStrategyFactoryFactory`, rozważcie rollback.
 
-## Build
+## Build and run
 
-Repo zawiera lokalny launcher `gradlew`. Pierwsze uruchomienie pobierze Gradle 8.13.
+The executable is a Swift Package Manager target. Build and test it with:
 
 ```bash
-./gradlew clean compile
+swift build
+swift test
 ```
 
-Copilot jest zakładany jako już skonfigurowany w IntelliJ — `gradlew` nie instaluje ani nie konfiguruje Copilota.
+Generate a seating plan with exactly two paths:
+
+```bash
+./run.sh input/scenario1.json output/seating-plan.json
+```
+
+The program validates the fixed five-table venue and 30 unique guests, places Bartek and Nina at `T1`, and writes a canonical JSON plan only after complete validation. It publishes through a temporary sibling file, so an existing output is retained if decoding, validation, planning, or encoding fails.
+
+Output is deterministic: repeated invocations with the same input create byte-identical files. The built-in evidence catalogue prefers the dance floor (`T2`) for explicitly dance-oriented guests and the exit/terrace (`T4`) for the explicit smoke-break preference; group membership is only a final soft preference. Provider credentials are not read from input or written to output.

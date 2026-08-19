@@ -29,3 +29,8 @@
 
 - **Rationale**: Encode the fully validated output to a sibling temporary file and replace the requested destination only after a successful write. On decode, validation, planning, agent, or write error, remove only the temporary file and preserve an existing destination.
 - **Alternatives considered**: Streaming directly to the destination can leave malformed or partial output and violates FR-011.
+
+## Verified supplied-scenario policy outcome
+
+- The deterministic run seats `chrzestna_ania`, `swiadek_kuba`, and `tetiana` at `T2` for the explicit dance-floor preference, and `zosia` at `T4` for the explicit smoke/terrace preference.
+- No lower-priority group preference is treated as a hard rule. Any group distribution needed to preserve table capacity or a higher priority preference is therefore an expected trade-off, not a failure.
