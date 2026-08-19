@@ -33,3 +33,4 @@
 
 - Validation passed on 2026-08-19. The specification intentionally defers the complete evidence-backed seating-policy catalogue to clarification and planning; it does not assume private organizer scoring rules.
 - The Swift/SwiftPM platform mandate is governed by the project constitution and will be addressed in the technical plan, while this specification remains focused on user outcomes and behavior.
+- Scenario 2 amendment validation passed on 2026-08-19. The updated specification requires 31 active guests at five tables with four capacities of six and one capacity of seven, preserves Bartek and Nina at `T1`, and records only narrative-supported newcomer preferences.
