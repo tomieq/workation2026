@@ -17,9 +17,9 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 
 **Purpose**: Prepare the SwiftPM executable and Swift Testing targets required by every story.
 
-- [ ] T001 Update the Swift 6.2 executable target and SwiftAgent package dependency in `Package.swift`
-- [ ] T002 [P] Create the Swift Testing target directory and test target declaration for `Tests/workation2026Tests/`
-- [ ] T003 Update the executable launcher to forward exactly two input/output paths in `run.sh`
+- [X] T001 Update the Swift 6.2 executable target and SwiftAgent package dependency in `Package.swift`
+- [X] T002 [P] Create the Swift Testing target directory and test target declaration for `Tests/workation2026Tests/`
+- [X] T003 Update the executable launcher to forward exactly two input/output paths in `run.sh`
 
 ---
 
@@ -29,7 +29,7 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 
 **Critical**: Complete this phase before implementing any user story.
 
-- [ ] T004 Create Codable scenario, table, guest, policy, and output plan types in `Sources/workation2026/Models.swift`
+- [X] T004 Create Codable scenario, table, guest, policy, and output plan types in `Sources/workation2026/Models.swift`
 - [ ] T005 Implement fixed-venue input validation and candidate-plan invariant validation in `Sources/workation2026/Validation.swift`
 - [ ] T006 Implement temporary-file encoding, atomic output replacement, and destination-preservation cleanup in `Sources/workation2026/Validation.swift`
 - [ ] T007 [P] Add structural, mandatory-placement, and atomic-publication unit coverage in `Tests/workation2026Tests/ValidationTests.swift`
