@@ -31,13 +31,13 @@
 
 | Field | Type | Meaning |
 |---|---|---|
-| `kind` | enum | `mandatoryTable`, `separate`, `companion`, `locationPreference`, `conversationAvoidance`, `affinityPreference`, or `groupPreference`. |
+| `kind` | enum | `mandatoryTable`, `separate`, `companion`, `locationPreference`, `conversationAvoidance`, `avoidancePreference`, `affinityPreference`, or `groupPreference`. |
 | `guestIDs` | ordered set of `String` | Subjects of the rule. |
 | `tableID` | `String?` | Required for a mandatory table or location preference. |
-| `priority` | enum | `structural`, `mandatory`, `separation`, `companion`, `location`, `conversation`, `affinity`, `group`. |
+| `priority` | enum | `structural`, `mandatory`, `separation`, `companion`, `location`, `conversation`, `avoidance`, `affinity`, `group`. |
 | `evidence` | `String` | Brief/scenario phrase and source used for audit tests; never invented organizer intent. |
 
-Policies are evaluated in priority order. Structural and mandatory rules must hold. Explicit named separation and companion rules are hard constraints. Location, evidence-backed conversation avoidance, food/drink affinity, and group rules contribute only to the ordered preference score. `PolicyAssistant` candidates must additionally contain only known IDs, an allowed `kind`/`priority` combination, and an exact evidence span; candidates failing any check are discarded.
+Policies are evaluated in priority order. Structural and mandatory rules must hold. Explicit named separation and companion rules are hard constraints. Location, evidence-backed conversation or social avoidance, shared-topic and food/drink affinity, and group rules contribute only to the ordered preference score. `PolicyAssistant` candidates must additionally contain only known IDs, an allowed `kind`/`priority` combination, and an exact evidence span; candidates failing any check are discarded.
 
 ## SeatingPlan
 
