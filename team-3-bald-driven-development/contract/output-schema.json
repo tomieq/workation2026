@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wedding seating plan",
+  "type": "object",
+  "required": [
+    "tables"
+  ],
+  "properties": {
+    "tables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "tableId",
+          "guests"
+        ],
+        "properties": {
+          "tableId": {
+            "type": "string"
+          },
+          "guests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

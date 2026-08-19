@@ -1,0 +1,218 @@
+{
+  "scenario": "scenario1",
+  "title": "Pierwotna lista gości",
+  "tables": [
+    {
+      "id": "T1",
+      "name": "Production",
+      "capacity": 6,
+      "notes": "Stół Pary Młodej"
+    },
+    {
+      "id": "T2",
+      "name": "Development",
+      "capacity": 6,
+      "notes": "Najbliżej parkietu"
+    },
+    {
+      "id": "T3",
+      "name": "Test Environment",
+      "capacity": 6,
+      "notes": "Środek sali"
+    },
+    {
+      "id": "T4",
+      "name": "Hotfix",
+      "capacity": 6,
+      "notes": "Najbliżej wyjścia / tarasu"
+    },
+    {
+      "id": "T5",
+      "name": "Legacy",
+      "capacity": 6,
+      "notes": "Spokojniejsza część sali"
+    }
+  ],
+  "guests": [
+    {
+      "id": "mama_ela",
+      "name": "Mama Ela",
+      "group": "family",
+      "description": "Samodzielnie uszyła sobie kreację. Projekt, implementacja i QA wykonane in-house."
+    },
+    {
+      "id": "oliwia",
+      "name": "Oliwia",
+      "group": "family",
+      "description": "Czeka na zwrot pieniędzy za siedem odesłanych sukienek."
+    },
+    {
+      "id": "babcia_ela",
+      "name": "Babcia Ela",
+      "group": "family",
+      "description": "Nie mogła odpuścić takiej imprezy. Weselne doświadczenie ma większe niż większość sali."
+    },
+    {
+      "id": "piotr",
+      "name": "Piotr",
+      "group": "friends",
+      "description": "Podobno ktoś kiedyś widział go na parkiecie. Dowodów brak."
+    },
+    {
+      "id": "agnieszka",
+      "name": "Agnieszka",
+      "group": "friends",
+      "description": "Jeśli coś się nie spodoba, obsługa dostanie bardzo bezpośredni feedback."
+    },
+    {
+      "id": "zdzisiek",
+      "name": "Zdzisiek",
+      "group": "friends",
+      "description": "Rekord Polski: 8,7 poruszonego tematu na minutę."
+    },
+    {
+      "id": "chrzestna_ania",
+      "name": "Chrzestna Ania",
+      "group": "family",
+      "description": "Rodzinny wodzirej. Mikrofon nie jest jej potrzebny."
+    },
+    {
+      "id": "zosia",
+      "name": "Zosia",
+      "group": "friends",
+      "description": "Szuka kompana na papieroska. Networking zewnętrzny."
+    },
+    {
+      "id": "gosia",
+      "name": "Gosia",
+      "group": "friends",
+      "description": "Na wesele czeka bardziej niż Para Młoda."
+    },
+    {
+      "id": "amelka",
+      "name": "Amelka",
+      "group": "friends",
+      "description": "Za dużo jedzenia do wyboru powoduje deadlock decyzyjny."
+    },
+    {
+      "id": "ada",
+      "name": "Ada",
+      "group": "friends",
+      "description": "Srebro olimpijskie w nieoficjalnym rzucie talerzem."
+    },
+    {
+      "id": "kacper",
+      "name": "Kacper",
+      "group": "friends",
+      "description": "Zagra koncert na Sparkling Piano."
+    },
+    {
+      "id": "klara",
+      "name": "Klara",
+      "group": "friends",
+      "description": "Czeka aż ktoś poda jej drinka alkoholowego."
+    },
+    {
+      "id": "jacek",
+      "name": "Jacek",
+      "group": "friends",
+      "description": "KPI wieczoru: nie zasnąć przed 21:00."
+    },
+    {
+      "id": "swiadek_kuba",
+      "name": "Świadek Kuba",
+      "group": "friends",
+      "description": "Świadek z nieskromnym stylem tańca."
+    },
+    {
+      "id": "przemek",
+      "name": "Przemek",
+      "group": "work",
+      "description": "Reprezentant działu QA. Nigdy się nie uśmiecha, chyba że Pan Młody przebierze się za gwiazdę estrady. Ma dojścia do taniego spirytusu i naturalną potrzebę reprodukowania błędów."
+    },
+    {
+      "id": "pawel",
+      "name": "Paweł",
+      "group": "work",
+      "description": "Lider techniczny, perfekcyjny, nigdy się nie myli. Ostatnio na imprezach raczej zachowuje pełny monitoring niż ściga się w toastach."
+    },
+    {
+      "id": "leszek",
+      "name": "Leszek",
+      "group": "work",
+      "description": "Członek Klubu Toyoty. Trudne relacje z SRE."
+    },
+    {
+      "id": "mariusz",
+      "name": "Mariusz",
+      "group": "work",
+      "description": "Do rany przyłóż, każdego wytłumaczy, pilnuje kosztów, lubi docinać Przemkowi i lubi Sławka M."
+    },
+    {
+      "id": "tomek",
+      "name": "Tomek",
+      "group": "work",
+      "description": "Łysy, na wypożyczeniu w innym zespole, zamawia szampana i winogrona."
+    },
+    {
+      "id": "slawek_m",
+      "name": "Sławek M.",
+      "group": "politics",
+      "description": "Ekonomista i polityk kojarzony z gospodarką, podatkami i bardzo bezpośrednią debatą. Cisza przy stole może szybko zamienić się w panel ekonomiczny."
+    },
+    {
+      "id": "maciek",
+      "name": "Maciek",
+      "group": "work",
+      "description": "Trenuje CrossFit, zamawia kilogramy jedzenia, łysy."
+    },
+    {
+      "id": "michal",
+      "name": "Michał",
+      "group": "work",
+      "description": "Niby lider zespołu, release robi tydzień, łysy, autor pomysłu aplikacji do obsługi cmentarzy."
+    },
+    {
+      "id": "jakub",
+      "name": "Jakub",
+      "group": "work",
+      "description": "Nowy w zespole, świeża krew, prawie nie je, mieszka w Radomiu."
+    },
+    {
+      "id": "tetiana",
+      "name": "Tetiana",
+      "group": "work",
+      "description": "Spokojna osoba, królowa parkietu, na co dzień biega."
+    },
+    {
+      "id": "donald_t",
+      "name": "Donald T.",
+      "group": "politics",
+      "description": "Premier z wieloletnim doświadczeniem politycznym i koalicyjnym. Nawet wybór zupy może potraktować jak negocjacje większości."
+    },
+    {
+      "id": "jaroslaw_k",
+      "name": "Jarosław K.",
+      "group": "politics",
+      "description": "Wieloletni lider i prezes PiS. Rozmowę o sali może płynnie zamienić w strategiczną analizę sytuacji państwa."
+    },
+    {
+      "id": "kuba_s",
+      "name": "Kuba S. „Gangus”",
+      "group": "work",
+      "description": "Były kolega z zespołu, więcej tatuaży niż lat, wpadł na przepustce."
+    },
+    {
+      "id": "bartek",
+      "name": "Bartek",
+      "group": "work",
+      "description": "Pan Młody. Programista i właściciel problemu."
+    },
+    {
+      "id": "nina",
+      "name": "Nina",
+      "group": "bride",
+      "description": "Panna Młoda i finalny Product Owner wesela."
+    }
+  ]
+}
