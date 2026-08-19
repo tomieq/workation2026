@@ -7,10 +7,6 @@
   "integration_settings": {
     "copilot": {
       "script": "sh",
-      "raw_options": "--commands",
-      "parsed_options": {
-        "commands": true
-      },
       "invoke_separator": "."
     }
   },
