@@ -8,6 +8,12 @@
 
 **Input**: User description: "Prepare specification based on project requirements"
 
+## Clarifications
+
+### Session 2026-08-19
+
+- Q: How should the solver turn guest narratives into seating rules? -> A: Direct named references create hard rules; shared traits and venue cues are soft preferences.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Generate a Valid Complete Plan (Priority: P1)
@@ -82,6 +88,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, then location preferences.
 - **FR-010**: The system MUST produce the same plan for identical valid input.
 - **FR-011**: The system MUST report input-validation and output-writing failures clearly, and MUST NOT leave a partial or schema-valid-looking output plan after a failed run.
+- **FR-012**: Only an unambiguous narrative reference that names another guest may create a hard companion or separation rule; shared traits and table-location cues are soft preferences.
 
 ### Key Entities *(include if feature involves data)*
 
