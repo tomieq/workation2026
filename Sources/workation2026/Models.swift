@@ -50,6 +50,38 @@ struct SeatingPolicy: Equatable {
     let tableID: String?
     let priority: SeatingPolicyPriority
     let evidence: String
+    let weight: Int
+
+    init(
+        kind: SeatingPolicyKind,
+        guestIDs: [String],
+        tableID: String?,
+        priority: SeatingPolicyPriority,
+        evidence: String,
+        weight: Int? = nil
+    ) {
+        self.kind = kind
+        self.guestIDs = guestIDs
+        self.tableID = tableID
+        self.priority = priority
+        self.evidence = evidence
+        self.weight = weight ?? priority.defaultWeight
+    }
+}
+
+private extension SeatingPolicyPriority {
+    var defaultWeight: Int {
+        switch self {
+        case .structural, .mandatory, .separation, .companion:
+            return 0
+        case .location:
+            return 100
+        case .affinity:
+            return 10
+        case .group:
+            return 1
+        }
+    }
 }
 
 struct SeatingPlan: Codable, Equatable {

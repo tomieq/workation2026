@@ -35,3 +35,18 @@
 - The deterministic run seats `chrzestna_ania`, `swiadek_kuba`, and `tetiana` at `T2` for the explicit dance-floor preference, and `zosia` at `T4` for the explicit smoke/terrace preference.
 - It keeps `jacek` and `pawel` at quiet `T5` for explicit energy-conservation and low-toast signals, and favors the alcohol-related table-mate affinity among `klara`, `przemek`, and `tomek`. The food-related `maciek`/`jakub` affinity remains soft because the brief gives no food-service location.
 - No lower-priority group preference is treated as a hard rule. Any group distribution needed to preserve table capacity or a higher priority preference is therefore an expected trade-off, not a failure.
+
+## Brief-Derived Weight Map
+
+| Evidence in the public brief | Policy | Weight / priority | Reasoning |
+|---|---|---:|---|
+| Mariusz explicitly likes Sławek M. | Companion: `mariusz` + `slawek_m` | Hard companion | An explicit named positive relationship. |
+| Jarosław names Donald and Sławek as a likely political-panel combination | Separate: `donald_t` + `jaroslaw_k`; `jaroslaw_k` + `slawek_m` | Hard separation | Explicit named high-risk conversation combinations. |
+| Ania, Świadek Kuba, and Tetiana are explicitly dance-oriented | Prefer `T2` | 300 | The strongest soft location cue: `T2` is beside the dance floor. |
+| Zosia explicitly seeks smoke breaks | Prefer `T4` | 300 | The strongest soft location cue: `T4` is beside the exit/terrace. |
+| Jacek, Leszek, and Paweł signal low energy, low-toast, or moderation needs | Prefer `T5` | 200 | A strong quiet-area preference, but below hard relationship rules. |
+| Klara, Przemek, and Tomek explicitly mention alcoholic drinks, spirits, or champagne | Shared table affinity | 75 per matching tablemate | A moderate shared drink interest; no bar location is supplied. |
+| Maciek and Jakub have an explicit food-intake contrast | Shared table affinity | 50 per matching tablemate | A weaker food conversation affinity; no food-service location is supplied. |
+| Supplied `group` field | Shared table affinity | 1 per matching tablemate | The final tie-breaking social preference only. |
+
+Hard structural and couple-placement rules take precedence over every row above. The workation-team lists remain excluded because the brief explicitly says they are not wedding-seating requirements.
