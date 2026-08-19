@@ -29,11 +29,7 @@ struct PolicyTests {
         #expect(policy(for: ["zosia"])?.weight == 300)
         #expect(policy(for: ["jacek", "leszek", "pawel"])?.tableID == "T5")
         #expect(policy(for: ["jacek", "leszek", "pawel"])?.weight == 200)
-        #expect(policy(for: ["mariusz", "przemek"])?.kind == .avoidancePreference)
-        #expect(policy(for: ["mariusz", "przemek"])?.weight == 100)
-        #expect(policy(for: ["mama_ela", "oliwia"])?.weight == 50)
-        #expect(policy(for: ["klara", "przemek"])?.weight == 75)
-        #expect(policy(for: ["klara", "przemek", "tomek"]) == nil)
+        #expect(policy(for: ["klara", "przemek", "tomek"])?.weight == 75)
         #expect(policy(for: ["jakub", "maciek"])?.weight == 50)
         #expect(policy(for: ["chrzestna_ania", "gosia", "kacper", "swiadek_kuba", "tetiana"])?.weight == 100)
     }
@@ -74,7 +70,7 @@ struct PolicyTests {
             tables: (1...5).map { VenueTable(id: "T\($0)", name: "Table", capacity: 6, notes: nil) },
             guests: [
                 "mariusz", "slawek_m", "donald_t", "jaroslaw_k", "chrzestna_ania", "swiadek_kuba",
-                "tetiana", "gosia", "kacper", "zosia", "jacek", "leszek", "pawel", "klara", "przemek", "tomek", "jakub", "maciek", "mama_ela", "oliwia",
+                "tetiana", "gosia", "kacper", "zosia", "jacek", "leszek", "pawel", "klara", "przemek", "tomek", "jakub", "maciek",
             ].map { Guest(id: $0, name: $0, group: nil, description: nil) }
         )
     }

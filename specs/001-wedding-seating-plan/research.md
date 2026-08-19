@@ -46,10 +46,7 @@
 | Ania, Gosia, Kacper, Świadek Kuba, and Tetiana explicitly describe a lively, performance, or all-night celebration style | Shared table affinity | 100 per matching tablemate | Keeps compatible active participants together without forcing placement. |
 | Zosia explicitly seeks smoke breaks | Prefer `T4` | 300 | The strongest soft location cue: `T4` is beside the exit/terrace. |
 | Jacek, Leszek, and Paweł signal low energy, low-toast, or moderation needs | Prefer `T5` | 200 | A strong quiet-area preference, but below hard relationship rules. |
-| Agnieszka, Donald, Jarosław, Sławek, and Zdzisiek explicitly signal confrontational, debate-prone, or unusually high-volume communication | Avoid shared tables | -125 per matching tablemate | A strong soft dispersion rule; only named conflicts are hard separations. |
-| Mariusz explicitly likes teasing Przemek | Avoid shared table | -100 per matching tablemate | An explicit named dynamic worth reducing, but not a hard conflict. |
-| Mama Ela and Oliwia explicitly focus on making or repeatedly selecting dresses | Shared table affinity | 50 per matching tablemate | A lower-priority, explicit shared conversation topic. |
-| Klara and Przemek explicitly mention a drink or spirits | Shared table affinity | 75 per matching tablemate | A moderate shared drink interest; Tomek is excluded because the brief says he now favors style over the number of drinks. |
+| Klara, Przemek, and Tomek explicitly mention alcoholic drinks, spirits, or champagne | Shared table affinity | 75 per matching tablemate | A moderate shared drink interest; no bar location is supplied. |
 | Maciek and Jakub have an explicit food-intake contrast | Shared table affinity | 50 per matching tablemate | A weaker food conversation affinity; no food-service location is supplied. |
 | Supplied `group` field | Shared table affinity | 1 per matching tablemate | The final tie-breaking social preference only. |
 
