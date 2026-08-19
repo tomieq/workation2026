@@ -44,6 +44,23 @@ struct DeterministicPlannerTests {
         #expect(tableForGuest["guest4"] == "T4")
     }
 
+    @Test
+    func favorsEvidenceBackedFoodAndDrinkAffinities() throws {
+        let scenario = plannerScenario()
+        let policies = [
+            SeatingPolicy(kind: .affinityPreference, guestIDs: ["guest1", "guest2"], tableID: nil, priority: .affinity, evidence: "both explicitly prefer champagne"),
+            SeatingPolicy(kind: .affinityPreference, guestIDs: ["guest3", "guest4"], tableID: nil, priority: .affinity, evidence: "both explicitly discuss substantial meals"),
+        ]
+
+        let plan = try DeterministicPlanner.plan(for: scenario, policies: policies)
+        let tableForGuest = Dictionary(uniqueKeysWithValues: plan.tables.flatMap { table in
+            table.guests.map { ($0, table.tableId) }
+        })
+
+        #expect(tableForGuest["guest1"] == tableForGuest["guest2"])
+        #expect(tableForGuest["guest3"] == tableForGuest["guest4"])
+    }
+
     private func plannerScenario() -> SeatingScenario {
         let guests = (1...28).map { Guest(id: "guest\($0)", name: "Guest \($0)", group: nil, description: nil) }
             + [Guest(id: "bartek", name: "Bartek", group: nil, description: nil), Guest(id: "nina", name: "Nina", group: nil, description: nil)]

@@ -15,6 +15,7 @@
 - Q: How should the solver turn guest narratives into seating rules? -> A: Direct named references create hard rules; shared traits and venue cues are soft preferences.
 - Q: Should the solver treat a guest's group value, such as family or work, as a soft seating preference? -> A: Use group membership as a lowest-priority soft preference.
 - Q: When soft preferences conflict at the same priority, how should the solver choose between equally valid plans? -> A: Choose the lexicographically smallest final table and guest-ID arrangement.
+- Q: How should explicit dining and drinking signals influence seating when the venue has no food or bar location? -> A: Treat shared, explicit drinking and food-related descriptions as a soft table-mate affinity; place energy-conserving or low-toast guests at the quiet table when feasible.
 - Q: If generation fails and the output path already contains an earlier valid plan, should the program keep or delete that existing file? -> A: Keep any existing output unchanged on failure.
 - Q: How should the solver use the confirmed locations of Table 2 by the dance floor and Table 4 by the exit/terrace? -> A: Dance-related descriptions prefer Table 2; smoke/terrace-related descriptions prefer Table 4.
 
@@ -90,13 +91,14 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-006**: The system MUST assign Bartek and Nina to `T1`.
 - **FR-007**: The system MUST write a result that conforms to the published wedding seating output schema and contains no additional output fields.
 - **FR-008**: The system MUST use a documented seating-policy catalogue derived from explicit signals in guest groups, guest descriptions, and table-location notes; it MUST NOT derive seating rules from workation team membership or unstated organizer intent.
-- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, location preferences, then group-membership preferences.
+- **FR-009**: The system MUST apply seating constraints in this order: structural validity, mandatory couple placement, explicit guest separation rules, explicit companion rules, location preferences, explicit food/drink affinities, then group-membership preferences.
 - **FR-010**: The system MUST produce the same plan for identical valid input.
 - **FR-011**: The system MUST report input-validation and output-writing failures clearly, MUST publish a new output plan only after successful validation, and MUST leave any existing output file unchanged after a failed run.
 - **FR-012**: Only an unambiguous narrative reference that names another guest may create a hard companion or separation rule; shared traits and table-location cues are soft preferences.
 - **FR-013**: The system MAY use supplied guest group membership as the lowest-priority soft preference only after all higher-priority seating constraints and preferences are satisfied.
 - **FR-014**: When multiple plans satisfy the same seating constraints and preferences, the system MUST choose the lexicographically smallest arrangement by table ID and then guest ID.
 - **FR-015**: The system MUST treat `T2` as nearest the dance floor and `T4` as nearest the exit/terrace. After higher-priority constraints, it MUST prefer `T2` for guests whose descriptions explicitly indicate dancing and `T4` for guests whose descriptions explicitly indicate smoke or terrace breaks.
+- **FR-016**: When no relevant food or bar table location is supplied, the system MUST treat only explicit food- or drink-related descriptions as a soft affinity among those named guests. It MUST prefer quiet `T5` for explicit low-energy, early-departure, or low-toast signals when feasible.
 
 ### Key Entities *(include if feature involves data)*
 

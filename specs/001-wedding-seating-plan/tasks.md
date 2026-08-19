@@ -110,6 +110,8 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 - [X] T025 Run the documented package and CLI verification sequence from `specs/001-wedding-seating-plan/quickstart.md`
 - [X] T026 Validate the generated output against `contract/output-schema.json` and record any unavoidable lower-priority policy trade-offs in `specs/001-wedding-seating-plan/research.md`
 - [X] T027 Verify a valid supplied scenario completes within 10 seconds and leaves no credentials in output or diagnostics in `Tests/workation2026Tests/CLIRunTests.swift`
+- [X] T028 Add regression coverage for evidence-backed food and drink affinity scoring in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [X] T029 Extend the documented policy catalogue and solver with soft food/drink affinity and quiet-table preferences in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, and `Sources/workation2026/DeterministicPlanner.swift`
 
 ---
 

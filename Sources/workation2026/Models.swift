@@ -26,6 +26,7 @@ enum SeatingPolicyKind: String, Codable, CaseIterable {
     case separate
     case companion
     case locationPreference
+    case affinityPreference
     case groupPreference
 }
 
@@ -35,6 +36,7 @@ enum SeatingPolicyPriority: Int, Codable, Comparable, CaseIterable {
     case separation
     case companion
     case location
+    case affinity
     case group
 
     static func < (lhs: SeatingPolicyPriority, rhs: SeatingPolicyPriority) -> Bool {

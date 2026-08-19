@@ -74,7 +74,7 @@ enum DeterministicPlanner {
                     }?.key
                     if let assignedTable, assignedTable != tableID { return false }
                 }
-            case .locationPreference, .groupPreference:
+            case .locationPreference, .affinityPreference, .groupPreference:
                 continue
             }
         }
@@ -95,6 +95,8 @@ enum DeterministicPlanner {
                 if policy.guestIDs.contains(where: occupants.contains) { result += 10_000 }
             case .locationPreference:
                 if policy.tableID == tableID { result += 100 }
+            case .affinityPreference:
+                result += occupants.filter(policy.guestIDs.contains).count * 10
             case .groupPreference:
                 let group = guestsByID[guestID]?.group?.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !group.isNilOrEmpty {
@@ -116,6 +118,8 @@ enum DeterministicPlanner {
                 return total + 1_000
             case .locationPreference:
                 return total + 100
+            case .affinityPreference:
+                return total + 10
             case .mandatoryTable, .groupPreference:
                 return total
             }

@@ -7,6 +7,9 @@ enum SeatingPolicyCatalogue {
             SeatingPolicy(kind: .mandatoryTable, guestIDs: ["bartek", "nina"], tableID: "T1", priority: .mandatory, evidence: "T1 is the couple's table."),
             SeatingPolicy(kind: .locationPreference, guestIDs: ["chrzestna_ania", "swiadek_kuba", "tetiana"], tableID: "T2", priority: .location, evidence: "Descriptions explicitly mention dancing or the dance floor."),
             SeatingPolicy(kind: .locationPreference, guestIDs: ["zosia"], tableID: "T4", priority: .location, evidence: "Description explicitly mentions smoke breaks; T4 is nearest the exit/terrace."),
+            SeatingPolicy(kind: .locationPreference, guestIDs: ["jacek", "pawel"], tableID: "T5", priority: .location, evidence: "Descriptions explicitly indicate conserving energy or avoiding toast competition; T5 is the quieter area."),
+            SeatingPolicy(kind: .affinityPreference, guestIDs: ["klara", "przemek", "tomek"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly mention alcohol, spirits, or champagne."),
+            SeatingPolicy(kind: .affinityPreference, guestIDs: ["maciek", "jakub"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly describe contrasting eating habits."),
         ]
 
         let groups = Dictionary(grouping: scenario.guests.filter {
@@ -42,6 +45,8 @@ enum SeatingPolicyCatalogue {
                 return policy.priority == .companion && policy.guestIDs.count == 2 && policy.tableID == nil
             case .locationPreference:
                 return policy.priority == .location && policy.tableID.map(tableIDs.contains) == true
+            case .affinityPreference:
+                return policy.priority == .affinity && policy.guestIDs.count > 1 && policy.tableID == nil
             case .groupPreference:
                 return policy.priority == .group && policy.tableID == nil
             }

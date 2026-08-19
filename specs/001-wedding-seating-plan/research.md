@@ -17,7 +17,7 @@
 
 ## Decision: Define policy only from public, explicit evidence
 
-- **Rationale**: The policy extractor maps explicit named guest references to hard companion/separation candidates, dance wording to `T2`, smoke/terrace wording to `T4`, and group membership to the final soft tier. The brief establishes `T2` by the dance floor and `T4` by the exit/terrace. Workation-team lists are categorically excluded.
+- **Rationale**: The policy extractor maps explicit named guest references to hard companion/separation candidates, dance wording to `T2`, smoke/terrace wording to `T4`, and group membership to the final soft tier. It also treats an explicit shared drinking or food signal as a lower-priority table-mate affinity, rather than inventing a bar or buffet location. Descriptions that explicitly conserve energy or avoid toast competition prefer quiet `T5`. The brief establishes `T2` by the dance floor, `T4` by the exit/terrace, and `T5` as quiet. Workation-team lists are categorically excluded.
 - **Alternatives considered**: Inferring personality compatibility from jokes, names, occupations, or unstated social assumptions is rejected by the constitution and specification.
 
 ## Decision: Search by assignments and canonicalize equal scores
@@ -33,4 +33,5 @@
 ## Verified supplied-scenario policy outcome
 
 - The deterministic run seats `chrzestna_ania`, `swiadek_kuba`, and `tetiana` at `T2` for the explicit dance-floor preference, and `zosia` at `T4` for the explicit smoke/terrace preference.
+- It keeps `jacek` and `pawel` at quiet `T5` for explicit energy-conservation and low-toast signals, and favors the alcohol-related table-mate affinity among `klara`, `przemek`, and `tomek`. The food-related `maciek`/`jakub` affinity remains soft because the brief gives no food-service location.
 - No lower-priority group preference is treated as a hard rule. Any group distribution needed to preserve table capacity or a higher priority preference is therefore an expected trade-off, not a failure.
