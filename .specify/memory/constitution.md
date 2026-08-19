@@ -1,8 +1,10 @@
 <!--
 Sync Impact Report
-Version change: unversioned template -> 1.0.0
-Modified principles: none; initial constitution created from template
-Added sections: Delivery Constraints; Spec-Driven Workflow
+Version change: 1.0.0 -> 2.0.0
+Modified principles: II. prior platform policy -> II. Swift Package Manager Implementation;
+III. Contract-Valid Seating Is Non-Negotiable -> III. Contract-Valid Swift Executable Is
+Non-Negotiable
+Added sections: none
 Removed sections: none
 Follow-up TODOs: none
 -->
@@ -17,18 +19,19 @@ output contract. Narrative guest descriptions MUST be examined for actionable se
 unsupported organizer intent, private scoring rules, and invented constraints MUST NOT be assumed.
 This keeps decisions traceable to the material available to every participant.
 
-### II. Language-Neutral, Replaceable Implementation
-The specification, domain model, algorithm design, and acceptance criteria MUST remain independent
-of Kotlin, Swift, SPM, Gradle, or any other implementation technology until the team records its
-implementation choice in the technical plan. Each implementation-facing decision MUST identify the
-stable behavior it preserves so either team member can implement or review it. This enables a joint
-Swift/Kotlin team to choose tooling without prematurely constraining the solution.
+### II. Swift Package Manager Implementation
+The application MUST be implemented as a Swift Package Manager executable application. Its package
+manifest, source layout, executable target, and tests MUST use standard SwiftPM conventions, and any
+dependency MUST be declared in `Package.swift`. The domain model, algorithm design, and acceptance
+criteria MUST use clear Swift types and APIs that support direct review and testing by the team.
+This gives the selected platform a single, reproducible build and test path.
 
-### III. Contract-Valid Seating Is Non-Negotiable
+### III. Contract-Valid Swift Executable Is Non-Negotiable
 Every produced seating plan MUST honor the published JSON output schema, assign exactly 30 distinct
-guests to five tables of six, and place Bartek and Nina at `T1`. The executable delivery boundary MUST
-remain `./run.sh <input.json> <output.json>` regardless of the chosen implementation language. These
-invariants define a usable result before any optimization quality is considered.
+guests to five tables of six, and place Bartek and Nina at `T1`. The SwiftPM executable MUST be
+invoked through `./run.sh <input.json> <output.json>`, with the script delegating to the package's
+executable target. These invariants define a usable result before any optimization quality is
+considered.
 
 ### IV. Deterministic, Verifiable Optimization
 The solver MUST be deterministic for identical input and configuration, and its outcome MUST be
@@ -48,9 +51,10 @@ reviewers can challenge assumptions and reproduce results.
 
 The final deliverable MUST be a program, not a manually curated output JSON, and it MUST generate
 its result from the supplied input. It MUST read the input path and write the output path passed to
-`run.sh`; errors MUST be reported clearly and MUST NOT silently emit an invalid plan. The project MAY
-choose Kotlin, Swift/SPM, or another agreed runtime only after the technical plan records how the
-chosen toolchain supports the required invocation and contract.
+`run.sh`; errors MUST be reported clearly and MUST NOT silently emit an invalid plan. `run.sh` MUST
+build or run the SwiftPM executable without requiring Gradle, Kotlin, or another application runtime.
+The technical plan MUST document the executable target name and the exact command path used by the
+launcher.
 
 ## Spec-Driven Workflow
 
@@ -70,7 +74,7 @@ assessment.
 
 Versioning uses semantic versioning: MAJOR for incompatible principle removal or redefinition, MINOR
 for a new principle or materially expanded governance, and PATCH for clarifications or wording that
-does not alter policy. The current implementation-language choice belongs in the technical plan, not
-in this constitution, unless the team later adopts a permanent language requirement.
+does not alter policy. Swift and SwiftPM are mandatory platform requirements; a change to either
+requires a MAJOR amendment and updates to affected implementation artifacts.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
+**Version**: 2.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
