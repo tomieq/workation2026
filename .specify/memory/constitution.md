@@ -1,9 +1,8 @@
 <!--
 Sync Impact Report
-Version change: 1.0.0 -> 2.0.0
-Modified principles: II. prior platform policy -> II. Swift Package Manager Implementation;
-III. Contract-Valid Seating Is Non-Negotiable -> III. Contract-Valid Swift Executable Is
-Non-Negotiable
+Version change: 2.0.0 -> 3.0.0
+Modified principles: III. Contract-Valid Swift Executable Is Non-Negotiable ->
+III. Contract-Valid, Change-Controlled Swift Executable Is Non-Negotiable
 Added sections: none
 Removed sections: none
 Follow-up TODOs: none
@@ -26,12 +25,13 @@ dependency MUST be declared in `Package.swift`. The domain model, algorithm desi
 criteria MUST use clear Swift types and APIs that support direct review and testing by the team.
 This gives the selected platform a single, reproducible build and test path.
 
-### III. Contract-Valid Swift Executable Is Non-Negotiable
-Every produced seating plan MUST honor the published JSON output schema, assign exactly 30 distinct
-guests to five tables of six, and place Bartek and Nina at `T1`. The SwiftPM executable MUST be
-invoked through `./run.sh <input.json> <output.json>`, with the script delegating to the package's
-executable target. These invariants define a usable result before any optimization quality is
-considered.
+### III. Contract-Valid, Change-Controlled Swift Executable Is Non-Negotiable
+Every produced seating plan MUST honor the published JSON output schema, assign every active guest
+exactly once, and place Bartek and Nina at `T1`. Capacity and table occupancy MUST match the
+currently approved challenge scenario: Scenario 2 requires 31 active guests at five tables, with
+four tables of six and exactly one table of seven. The SwiftPM executable MUST be invoked through
+`./run.sh <input.json> <output.json>`, with the script delegating to the package's executable
+target. These invariants define a usable result before any optimization quality is considered.
 
 ### IV. Deterministic, Verifiable Optimization
 The solver MUST be deterministic for identical input and configuration, and its outcome MUST be
@@ -75,6 +75,8 @@ assessment.
 Versioning uses semantic versioning: MAJOR for incompatible principle removal or redefinition, MINOR
 for a new principle or materially expanded governance, and PATCH for clarifications or wording that
 does not alter policy. Swift and SwiftPM are mandatory platform requirements; a change to either
-requires a MAJOR amendment and updates to affected implementation artifacts.
+requires a MAJOR amendment and updates to affected implementation artifacts. A challenge change
+request that alters mandatory capacity, active guests, or fixed placements MUST be reflected in this
+constitution and in the affected Spec Kit artifacts before implementation begins.
 
-**Version**: 2.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
+**Version**: 3.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
