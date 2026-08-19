@@ -49,7 +49,7 @@
 
 ## Decision: Search by assignments and canonicalize equal scores
 
-- **Rationale**: The fixed 30-guest, five-table scope allows a bounded backtracking/branch-and-bound search with mandatory placements and hard relationship pruning. Table IDs and guest IDs are sorted before comparing candidate vectors. The best objective score wins; exact score ties use the lexicographically smallest vector ordered by table ID then guest ID.
+- **Rationale**: The fixed 31-guest, five-table scope allows a bounded deterministic search over the five seventh-chair candidates and the eligible `T1` work-colleague pairs, followed by hard-constraint pruning and repeatable improvements. Table IDs and guest IDs are sorted before comparing candidate vectors. The best objective score wins; exact score ties use the lexicographically smallest vector ordered by table ID then guest ID.
 - **Alternatives considered**: Randomized shuffling and first-feasible allocation are rejected because both violate the repeatability and tie-break requirements. A general database-backed optimizer is unnecessary at this fixed scope.
 
 ## Decision: Publish output atomically after complete validation
@@ -59,8 +59,9 @@
 
 ## Verified supplied-scenario policy outcome
 
-- The deterministic run seats `chrzestna_ania`, `swiadek_kuba`, and `tetiana` at `T2` for the explicit dance-floor preference, and `zosia` at `T4` for the explicit smoke/terrace preference.
-- It keeps `jacek` and `pawel` at quiet `T5` for explicit energy-conservation and low-toast signals, and favors the alcohol-related table-mate affinity among `klara`, `przemek`, and `tomek`. The food-related `maciek`/`jakub` affinity remains soft because the brief gives no food-service location.
+- The Scenario 2 deterministic run must select one seventh-chair table while seating Bartek, Nina, and exactly two other work-group guests at `T1`; the chosen table is part of the scored candidate comparison.
+- It prefers `chrzestna_ania`, `swiadek_kuba`, and `tetiana` at `T2` for the explicit dance-floor preference, `zosia` at `T4` for smoke/terrace access, and `jacek` and `pawel` at quiet `T5` for low-energy or low-toast signals.
+- It treats Leszek with either `kuba_g` or `michal_z` as a soft avoidance and penalizes seating either newcomer with four or more work-group guests. The food-related `maciek`/`jakub` affinity remains soft because the brief gives no food-service location.
 - No lower-priority group preference is treated as a hard rule. Any group distribution needed to preserve table capacity or a higher priority preference is therefore an expected trade-off, not a failure.
 
 ## Brief-Derived Weight Map
@@ -68,16 +69,15 @@
 | Evidence in the public brief | Policy | Weight / priority | Reasoning |
 |---|---|---:|---|
 | Mariusz explicitly likes Sławek M. | Companion: `mariusz` + `slawek_m` | Hard companion | An explicit named positive relationship. |
-| Jarosław names Donald and Sławek as a likely political-panel combination | Separate: `donald_t` + `jaroslaw_k`; `jaroslaw_k` + `slawek_m` | Hard separation | Explicit named high-risk conversation combinations. |
-| Chrzestna Ania and Świadek Kuba are the named godmother and witness | Prefer `T1` | 20000 | Ceremonial support at the couple's table takes precedence over ordinary venue preferences. |
-| Mariusz is Bartek's work-group contact and must accompany Sławek through their explicit relationship | Prefer Mariusz at `T1` | 20000 | Gives Bartek exactly one work-group peer at the couple's table without forming a work cluster. |
+| Approved Scenario 2 requirement | Bartek, Nina, and exactly two other `work` guests at `T1` | Hard mandatory composition | The approved amendment defines an exact colleague count, not a soft `T1` preference. |
 | Ania, Świadek Kuba, and Tetiana are explicitly dance-oriented | Prefer `T2` | 300 | The strongest soft location cue: `T2` is beside the dance floor. |
 | Ania, Gosia, Kacper, Świadek Kuba, and Tetiana explicitly describe a lively, performance, or all-night celebration style | Shared table affinity | 100 per matching tablemate | Keeps compatible active participants together without forcing placement. |
 | Zosia explicitly seeks smoke breaks | Prefer `T4` | 300 | The strongest soft location cue: `T4` is beside the exit/terrace. |
 | Jacek, Leszek, and Paweł signal low energy, low-toast, or moderation needs | Prefer `T5` | 200 | A strong quiet-area preference, but below hard relationship rules. |
-| Jarosław explicitly identifies Donald and Sławek as the high-risk political discussion combination | Avoid Donald + Sławek sharing a table | -150 per matching tablemate | A targeted soft avoidance that resolves the panel-risk hint without broadly dispersing expressive guests. |
+| Leszek's documented objections to Michał Z. and Jakub G. | Avoid `leszek` + `michal_z`; avoid `leszek` + `kuba_g` | Soft avoidance | The Scenario 2 narrative describes avoidable awkwardness, not a hard separation. |
+| Michał Z. and Jakub G. attend for social company rather than a work offsite | Penalize either newcomer at a table with four or more `work` guests | Soft avoidance | The clarified threshold discourages a work-dominated table without overriding hard constraints. |
 | Klara, Przemek, and Tomek explicitly mention alcoholic drinks, spirits, or champagne | Shared table affinity | 75 per matching tablemate | A moderate shared drink interest; no bar location is supplied. |
 | Maciek and Jakub have an explicit food-intake contrast | Shared table affinity | 50 per matching tablemate | A weaker food conversation affinity; no food-service location is supplied. |
 | Supplied `group` field | Shared table affinity | 1 per matching tablemate | The final tie-breaking social preference only. |
 
-Hard structural and couple-placement rules take precedence over every row above. Ambiguous or non-preferential descriptions, including Piotr's unconfirmed dancing and Kuba S.'s wildcard behavior, remain unscored. The workation-team lists remain excluded because the brief explicitly says they are not wedding-seating requirements.
+Hard structural and `T1` composition rules take precedence over every row above. Michał S.'s Bald Club history, Piotr's unconfirmed dancing, and Kuba S.'s wildcard behavior remain unscored. The workation-team lists remain excluded because the brief explicitly says they are not wedding-seating requirements.

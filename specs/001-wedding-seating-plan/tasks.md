@@ -1,122 +1,119 @@
 ---
 
-description: "Implementation tasks for the Wedding Seating Plan feature"
+description: "Scenario 2 implementation tasks for the Wedding Seating Plan"
 ---
 
-# Tasks: Wedding Seating Plan
+# Tasks: Wedding Seating Plan - Scenario 2
 
 **Input**: Design documents from `/specs/001-wedding-seating-plan/`
 
 **Prerequisites**: [plan.md](plan.md), [spec.md](spec.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/cli-contract.md](contracts/cli-contract.md), [quickstart.md](quickstart.md)
 
-**Tests**: Swift Testing and shell-level integration checks are required by the feature specification and implementation plan.
+**Tests**: Swift Testing and CLI integration coverage are required by the specification, constitution, and implementation plan. Write each listed test before the task it verifies and confirm it fails first.
 
-**Organization**: Tasks are grouped by user story so each increment can be implemented and validated independently.
+**Organization**: Tasks are grouped by user story so each increment is independently implementable and testable.
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Prepare the SwiftPM executable and Swift Testing targets required by every story.
+**Purpose**: Establish the canonical Scenario 2 fixture and a clean test baseline for the existing SwiftPM application.
 
-- [X] T001 Update the Swift 6.2 executable target and SwiftAgent package dependency in `Package.swift`
-- [X] T002 [P] Create the Swift Testing target directory and test target declaration for `Tests/workation2026Tests/`
-- [X] T003 Update the executable launcher to forward exactly two input/output paths in `run.sh`
+- [ ] T001 Verify the 31-active-guest Scenario 2 roster and one-chair authorization in `input/scenario2.json`
+- [ ] T002 Update Scenario 2 invocation and structural verification commands in `specs/001-wedding-seating-plan/quickstart.md`
+- [ ] T003 Run the pre-change Swift test baseline before updating Scenario 2 coverage in `Tests/workation2026Tests/ValidationTests.swift`
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Establish shared Codable types, scenario validation, output validation, and failure-safe file publication before planning work begins.
+**Purpose**: Add the shared Scenario 2 data and validation abstractions required by every user story.
 
-**Critical**: Complete this phase before implementing any user story.
+**Critical**: Complete this phase before starting user-story implementation.
 
-- [X] T004 Create Codable scenario, table, guest, policy, and output plan types in `Sources/workation2026/Models.swift`
-- [X] T005 Implement fixed-venue input validation and candidate-plan invariant validation in `Sources/workation2026/Validation.swift`
-- [X] T006 Implement temporary-file encoding, atomic output replacement, and destination-preservation cleanup in `Sources/workation2026/Validation.swift`
-- [X] T007 [P] Add structural, mandatory-placement, and atomic-publication unit coverage in `Tests/workation2026Tests/ValidationTests.swift`
-- [X] T008 Create the CLI argument parsing, error-to-stderr boundary, and dependency wiring in `Sources/workation2026/App.swift`
+- [ ] T004 Extend `SeatingScenario` with Codable `ExtraSeatPolicy` in `Sources/workation2026/Models.swift`
+- [ ] T005 Add Scenario 2 base-capacity, active-roster, extra-seat authorization, and exact `T1` colleague validation errors in `Sources/workation2026/Validation.swift`
+- [ ] T006 Derive final table capacities from the selected seven-seat table in `Sources/workation2026/Validation.swift`
+- [ ] T007 [P] Add Scenario 2 model and validation fixtures in `Tests/workation2026Tests/ValidationTests.swift`
+- [ ] T008 [P] Add decoding coverage for `extraSeatPolicy` in `Tests/workation2026Tests/CLIRunTests.swift`
 
-**Checkpoint**: The executable can decode a scenario, reject invalid shared invariants, and publish only a fully validated plan.
+**Checkpoint**: The application can decode the Scenario 2 fixture and shared validators can express its base-room, roster, and final-capacity invariants.
 
 ---
 
 ## Phase 3: User Story 1 - Generate a Valid Complete Plan (Priority: P1) MVP
 
-**Goal**: Generate a complete, schema-valid, deterministic seating plan that seats every guest once and keeps Bartek and Nina at `T1`.
+**Goal**: Generate a deterministic, schema-valid plan for `input/scenario2.json` with 31 active guests, four six-guest tables, one solver-selected seven-guest table, and the mandatory `T1` composition.
 
-**Independent Test**: Run `./run.sh input/scenario1.json output/seating-plan.json`; validate five sorted table entries, six sorted guest IDs per table, all 30 unique input IDs, and Bartek/Nina at `T1`; repeat the run and compare byte-identical output.
+**Independent Test**: Run `./run.sh input/scenario2.json output/scenario2-plan.json`; verify table sizes `[6,6,6,6,7]`, all 31 IDs exactly once, Bartek and Nina at `T1`, exactly two additional `work` guests at `T1`, and byte-identical repeated output.
 
 ### Tests for User Story 1
 
-- [X] T009 [P] [US1] Add planner tests for complete assignment, T1 couple placement, canonical guest ordering, and lexicographic tie-breaking in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
-- [X] T010 [P] [US1] Add CLI integration tests for the supplied scenario, output-schema shape, and repeatable output in `Tests/workation2026Tests/CLIRunTests.swift`
+- [ ] T009 [P] [US1] Add plan-validator tests for one seven-guest table, complete 31-guest coverage, and exact `T1` colleague composition in `Tests/workation2026Tests/ValidationTests.swift`
+- [ ] T010 [P] [US1] Add deterministic planner tests for selected extra-seat capacity, canonical ordering, and repeated Scenario 2 output in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [ ] T011 [P] [US1] Add end-to-end `input/scenario2.json` schema, occupancy, and repeatability tests in `Tests/workation2026Tests/CLIRunTests.swift`
 
 ### Implementation for User Story 1
 
-- [X] T011 [US1] Implement deterministic backtracking or branch-and-bound assignment with fixed T1 placements in `Sources/workation2026/DeterministicPlanner.swift`
-- [X] T012 [US1] Implement canonical table/guest sorting and lexicographic equal-score selection in `Sources/workation2026/DeterministicPlanner.swift`
-- [X] T013 [US1] Connect scenario decoding, deterministic planning, candidate validation, and JSON publication in `Sources/workation2026/App.swift`
+- [ ] T012 [US1] Enumerate each eligible seventh-chair table and legal non-Bartek `T1` work-colleague pair in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T013 [US1] Construct deterministic complete candidates with four six-seat capacities, one seven-seat capacity, and hard `T1` composition in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T014 [US1] Compare valid candidates by objective then canonical table/guest vector in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T015 [US1] Wire `ExtraSeatPolicy` validation through decode, planning, candidate validation, and atomic publication in `Sources/workation2026/App.swift`
 
-**Checkpoint**: The command produces a deterministic, complete contract-shaped plan for the supplied valid scenario.
+**Checkpoint**: The updated executable independently meets every structural Scenario 2 invariant and is deterministic.
 
 ---
 
 ## Phase 4: User Story 2 - Produce a Considered Social Arrangement (Priority: P2)
 
-**Goal**: Apply only public, evidence-backed companion, separation, location, and final-tier group policies when choosing an otherwise valid plan.
+**Goal**: Optimize the valid Scenario 2 plan using only active, evidence-backed policies, including newcomer/Leszek soft avoidance and the four-work-guest cluster threshold.
 
-**Independent Test**: Exercise the documented policy catalogue with fixtures that verify named companion/separation handling, T2 dance preference, T4 smoke/terrace preference, group scoring last, exclusion of workation-team lists, and deterministic resolution of policy ties.
+**Independent Test**: Review the `input/scenario2.json` result and targeted fixtures to verify retired policies are absent, named companion/separation behavior remains hard, the newcomer avoidances are soft, no Bald Club policy exists, and equal outcomes remain canonical.
 
 ### Tests for User Story 2
 
-- [X] T014 [P] [US2] Add public-evidence catalogue and policy-candidate rejection tests in `Tests/workation2026Tests/PolicyTests.swift`
-- [X] T015 [P] [US2] Add planner tests for hard relationship pruning and ordered location/group scoring in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [ ] T016 [P] [US2] Add Scenario 2 catalogue tests for retired-guest removal, newcomer avoidance, work-cluster threshold, and no Bald Club policy in `Tests/workation2026Tests/PolicyTests.swift`
+- [ ] T017 [P] [US2] Add planner tests for Leszek/newcomer soft avoidance, four-work-guest penalty, and higher-priority constraint precedence in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [ ] T018 [P] [US2] Add Scenario 2 policy integration assertions in `Tests/workation2026Tests/CLIRunTests.swift`
 
 ### Implementation for User Story 2
 
-- [X] T016 [US2] Implement the built-in public-evidence policy catalogue, priority validation, and exact evidence checks in `Sources/workation2026/SeatingPolicy.swift`
-- [X] T017 [US2] Extend the deterministic planner to enforce separation/companion policies and score location then group preferences in `Sources/workation2026/DeterministicPlanner.swift`
-- [X] T018 [US2] Implement optional environment-configured SwiftAgent policy proposals with non-fatal fallback and strict candidate validation in `Sources/workation2026/PolicyAssistant.swift`
-- [X] T019 [US2] Integrate validated built-in and optional assistant policies without permitting assistant output to bypass deterministic planning in `Sources/workation2026/App.swift`
+- [ ] T019 [US2] Replace Donald/Jaroslaw catalogue entries with active Scenario 2 policies in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T020 [US2] Encode Leszek--Jakub G. and Leszek--Michal Z. soft avoidance plus the four-work-guest newcomer penalty in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T021 [US2] Score Scenario 2 avoidance and work-cluster policies while preserving hard-policy precedence in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T022 [US2] Preserve strict validation of optional assistant policies against the active Scenario 2 roster in `Sources/workation2026/SeatingPolicy.swift`
 
-**Checkpoint**: Social choices are traceable to public evidence, higher-priority constraints win, and a missing or failed assistant still yields the deterministic built-in plan.
+**Checkpoint**: The solver's social choices are traceable to active public evidence and do not weaken the P1 structural rules.
 
 ---
 
 ## Phase 5: User Story 3 - Receive Clear Feedback for Invalid Scenarios (Priority: P3)
 
-**Goal**: Report specific invalid-input and output-write failures without emitting a partial or replacing a prior plan.
+**Goal**: Reject invalid Scenario 2 inputs clearly while preserving an existing output file.
 
-**Independent Test**: Run malformed JSON and invalid scenarios covering duplicate/missing guest IDs, mismatched count/capacity, missing T1/Bartek/Nina, and an unwritable output destination; each run exits non-zero, writes a specific stderr reason, and preserves any existing destination content.
+**Independent Test**: Supply malformed Scenario 2 fixtures for missing or invalid `extraSeatPolicy`, wrong guest count, non-six base capacity, retired/omitted roster members, insufficient `T1` colleagues, and invalid output occupancy; verify specific failures and unchanged destination content.
 
 ### Tests for User Story 3
 
-- [X] T020 [P] [US3] Add validation unit tests for duplicate or blank guest IDs, fixed venue/count violations, and missing mandatory seating elements in `Tests/workation2026Tests/ValidationTests.swift`
-- [X] T021 [P] [US3] Add CLI integration tests for malformed input, specific error reporting, write failure, and unchanged existing output in `Tests/workation2026Tests/CLIRunTests.swift`
+- [ ] T023 [P] [US3] Add validation tests for invalid extra-seat authorization, base capacity, count, active roster, and `T1` colleague availability in `Tests/workation2026Tests/ValidationTests.swift`
+- [ ] T024 [P] [US3] Add CLI failure and destination-preservation tests for invalid Scenario 2 inputs in `Tests/workation2026Tests/CLIRunTests.swift`
 
 ### Implementation for User Story 3
 
-- [X] T022 [US3] Add precise validation error cases for malformed scenario structure and mandatory seating requirements in `Sources/workation2026/Validation.swift`
-- [X] T023 [US3] Add clear non-zero CLI reporting for decode, validation, planning, and publication failures in `Sources/workation2026/App.swift`
+- [ ] T025 [US3] Return precise Scenario 2 validation errors for capacity authorization, roster, and `T1` composition in `Sources/workation2026/Validation.swift`
+- [ ] T026 [US3] Surface Scenario 2 decode, validation, planning, and publication failures as non-zero CLI errors in `Sources/workation2026/App.swift`
 
-**Checkpoint**: Invalid invocations fail clearly and never leave a partial or misleading destination file.
+**Checkpoint**: Invalid Scenario 2 invocations fail clearly without publishing or replacing a misleading plan.
 
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-**Purpose**: Verify the complete executable meets the published contract, performance, documentation, and reproducibility requirements.
+**Purpose**: Confirm the updated program, artifacts, and contract meet the Scenario 2 delivery standard.
 
-- [X] T024 [P] Document the final invocation, optional environment configuration, deterministic behavior, and failure guarantees in `README.md`
-- [X] T025 Run the documented package and CLI verification sequence from `specs/001-wedding-seating-plan/quickstart.md`
-- [X] T026 Validate the generated output against `contract/output-schema.json` and record any unavoidable lower-priority policy trade-offs in `specs/001-wedding-seating-plan/research.md`
-- [X] T027 Verify a valid supplied scenario completes within 10 seconds and leaves no credentials in output or diagnostics in `Tests/workation2026Tests/CLIRunTests.swift`
-- [X] T028 Add regression coverage for evidence-backed food and drink affinity scoring in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
-- [X] T029 Extend the documented policy catalogue and solver with soft food/drink affinity and quiet-table preferences in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, and `Sources/workation2026/DeterministicPlanner.swift`
-- [X] T030 Map public-brief special requirements to explicit weighted policies, including named companion/separation and location/affinity preferences, in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, `Sources/workation2026/DeterministicPlanner.swift`, and `specs/001-wedding-seating-plan/research.md`
-- [X] T031 Map explicitly described lively evening styles to a soft table-mate affinity in `Sources/workation2026/SeatingPolicy.swift` and document the evidence boundary in `specs/001-wedding-seating-plan/research.md`
-- [X] T032 Add a targeted soft avoidance for the explicitly flagged Donald/Sławek discussion pairing in `Sources/workation2026/Models.swift`, `Sources/workation2026/SeatingPolicy.swift`, and `Sources/workation2026/DeterministicPlanner.swift`
-- [X] T033 Prioritize the four named ceremonial roles for the optional seats at `T1` in `Sources/workation2026/SeatingPolicy.swift` and document the preference rationale in `specs/001-wedding-seating-plan/research.md`
-- [X] T034 Reserve one `T1` place for Bartek's work-group contact while preventing a work-table cluster in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T027 [P] Update Scenario 2 behavior, command examples, and optional-agent fallback notes in `README.md`
+- [ ] T028 Update the verified Scenario 2 policy outcome and any unavoidable trade-offs in `specs/001-wedding-seating-plan/research.md`
+- [ ] T029 Run the documented Scenario 2 build, unit-test, structural, determinism, and failure-preservation checks from `specs/001-wedding-seating-plan/quickstart.md`
+- [ ] T030 Validate `output/scenario2-plan.json` against `contract/output-schema.json` after the quickstart run
+- [ ] T031 Measure that `./run.sh input/scenario2.json output/scenario2-plan.json` completes within 10 seconds in `Tests/workation2026Tests/CLIRunTests.swift`
 
 ---
 
@@ -125,62 +122,58 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 ### Phase Dependencies
 
 - **Setup (Phase 1)**: Starts immediately.
-- **Foundational (Phase 2)**: Depends on T001-T003 and blocks every user story.
-- **US1 (Phase 3)**: Depends on T004-T008 and provides the MVP executable path.
-- **US2 (Phase 4)**: Depends on the canonical planner from US1; its policy tests can be prepared after the foundational models exist.
-- **US3 (Phase 5)**: Depends on shared validation and CLI boundaries; it can be implemented after Phase 2, but is sequenced after the higher-priority behavior.
-- **Polish (Phase 6)**: Depends on the desired story phases being complete.
+- **Foundational (Phase 2)**: Depends on Phase 1 and blocks all user stories.
+- **US1 (Phase 3)**: Depends on T004-T008 and is the MVP.
+- **US2 (Phase 4)**: Depends on the Scenario 2 candidate planner from US1.
+- **US3 (Phase 5)**: Depends on shared Scenario 2 validation from Phase 2 and can be developed in parallel with US2 after US1 contracts stabilize.
+- **Polish (Phase 6)**: Depends on all desired user-story phases.
 
 ### User Story Dependency Graph
 
 ```text
 Setup -> Foundational -> US1 (MVP) -> US2 -> Polish
-                      \-> US3 -----> Polish
+                                \-> US3 -----> Polish
 ```
 
-### Within Each Story
+### Parallel Opportunities
 
-- Write the listed Swift Testing checks before their corresponding implementation task and confirm they fail for the intended behavior.
-- Keep structural and mandatory constraints ahead of all policy scoring.
-- Run the story's independent test before beginning the next checkpoint.
-
-## Parallel Opportunities
-
-- T002 can proceed independently of T001 and T003.
-- T007 can be written alongside T008 after the foundation interfaces are agreed.
-- T009 and T010 can proceed in parallel; T014 and T015 can proceed in parallel; T020 and T021 can proceed in parallel.
-- After Phase 2, US3 validation coverage can proceed in parallel with the US1 planner implementation, provided shared validation APIs remain stable.
+- T007 and T008 can proceed in parallel after T004-T006 define shared APIs.
+- T009, T010, and T011 can proceed in parallel after foundational validation contracts stabilize.
+- T016, T017, and T018 can proceed in parallel after US1 produces valid Scenario 2 candidates.
+- T023 and T024 can proceed in parallel after foundational validation contracts stabilize.
+- T027 and T028 can proceed in parallel once the final policy behavior is settled.
 
 ### Parallel Example: User Story 1
 
 ```text
-Task: "Add planner tests in Tests/workation2026Tests/DeterministicPlannerTests.swift"
-Task: "Add CLI integration tests in Tests/workation2026Tests/CLIRunTests.swift"
+Task: "Add plan-validator coverage in Tests/workation2026Tests/ValidationTests.swift"
+Task: "Add planner coverage in Tests/workation2026Tests/DeterministicPlannerTests.swift"
+Task: "Add CLI integration coverage in Tests/workation2026Tests/CLIRunTests.swift"
 ```
 
 ### Parallel Example: User Story 2
 
 ```text
-Task: "Add policy catalogue tests in Tests/workation2026Tests/PolicyTests.swift"
-Task: "Add planner policy tests in Tests/workation2026Tests/DeterministicPlannerTests.swift"
+Task: "Add policy catalogue coverage in Tests/workation2026Tests/PolicyTests.swift"
+Task: "Add policy scoring coverage in Tests/workation2026Tests/DeterministicPlannerTests.swift"
+Task: "Add end-to-end policy assertions in Tests/workation2026Tests/CLIRunTests.swift"
 ```
 
 ## Implementation Strategy
 
 ### MVP First
 
-1. Complete setup and foundational models, validation, publication, and CLI boundary.
-2. Implement and test US1 to produce a deterministic, complete, schema-shaped plan.
-3. Run the US1 independent test using `input/scenario1.json` before adding social policy behavior.
+1. Complete Phases 1 and 2.
+2. Complete US1 through T015.
+3. Run the US1 independent test using `input/scenario2.json`.
+4. Stop for review only after the structural Scenario 2 plan is valid, deterministic, and schema-shaped.
 
 ### Incremental Delivery
 
-1. Add US2's public-evidence catalogue and deterministic scoring while preserving the US1 contract.
-2. Add US3's explicit error coverage and destination-preservation checks.
-3. Complete the quickstart, schema, determinism, timing, and documentation tasks in Phase 6.
+1. Add US2 policies and scoring while preserving the US1 contract.
+2. Add US3 failure coverage and output-preservation behavior.
+3. Complete documentation, schema validation, performance verification, and the full quickstart sequence.
 
-## Notes
+## Format Validation
 
-- `[P]` tasks are parallelizable only where their target files and incomplete dependencies do not conflict.
-- `[US1]`, `[US2]`, and `[US3]` labels provide traceability to the priority-ordered user stories in `spec.md`.
-- Every task uses the required checkbox, sequential ID, optional parallel marker, story label where required, and an exact file path.
+Every task uses the required checklist format: checkbox, sequential task ID, optional `[P]` marker, user-story label for story tasks, and an exact repository path.

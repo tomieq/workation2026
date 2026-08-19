@@ -1,4 +1,4 @@
-# Quickstart: Validate the Wedding Seating Plan
+# Quickstart: Validate the Wedding Seating Plan - Scenario 2
 
 ## Prerequisites
 
@@ -26,16 +26,25 @@ Expected outcome: the package resolves SwiftAgent, compiles the executable and t
 ## Generate a Plan
 
 ```sh
-./run.sh input/scenario1.json output/seating-plan.json
+./run.sh input/scenario2.json output/scenario2-plan.json
 ```
 
-Expected outcome: exit code `0`; the file matches the output contract, contains five sorted table entries of six sorted guest IDs, and has Bartek and Nina at `T1`. See [the data model](data-model.md) for the complete invariants.
+Expected outcome: exit code `0`; the file matches the output contract, contains five sorted table entries with table sizes `[6,6,6,6,7]`, and has Bartek, Nina, and exactly two additional `work`-group guests at `T1`. See [the data model](data-model.md) for the complete invariants.
+
+## Verify Scenario 2 Structure
+
+```sh
+jq '[.tables[].guests | length] | sort' output/scenario2-plan.json
+jq '[.tables[].guests[]] | length' output/scenario2-plan.json
+```
+
+Expected outcome: `[6,6,6,6,7]` and `31`. Verify that every ID from `input/scenario2.json` occurs once and that `T1` has Bartek, Nina, and exactly two other input guests whose group is `work`.
 
 ## Verify Determinism
 
 ```sh
-./run.sh input/scenario1.json output/first.json
-./run.sh input/scenario1.json output/second.json
+./run.sh input/scenario2.json output/first.json
+./run.sh input/scenario2.json output/second.json
 diff -u output/first.json output/second.json
 ```
 
@@ -48,4 +57,4 @@ printf '{"tables":[]}' > output/existing.json
 ./run.sh /tmp/invalid-wedding-scenario.json output/existing.json
 ```
 
-Expected outcome: non-zero exit with a clear error, and the content of `output/existing.json` is unchanged. Use malformed JSON, a duplicate guest ID, missing `T1`, or mismatched capacity as input-validation cases described in [the CLI contract](contracts/cli-contract.md).
+Expected outcome: non-zero exit with a clear error, and the content of `output/existing.json` is unchanged. Use malformed JSON, a duplicate guest ID, missing `T1`, an invalid `extraSeatPolicy`, or an invalid 31-guest roster as input-validation cases described in [the CLI contract](contracts/cli-contract.md).
