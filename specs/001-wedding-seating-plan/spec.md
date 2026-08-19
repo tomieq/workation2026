@@ -28,6 +28,8 @@
 - Michał S.'s former membership in the Bald Club is social context only; it does not name a required companion, a required separation, or a measurable seating preference.
 - `T1` must include exactly two active work-group guests in addition to Bartek; Bartek is not counted as one of those colleagues.
 - `input/scenario2.json` is the canonical supplied fixture for validating the updated program.
+- Q: When should a table count as dominated by work-group guests for Michał Z. and Jakub G.? → A: Four or more work-group guests.
+- Q: How should the program choose which table receives the seventh chair? → A: Choose the table yielding the best overall seating plan, using the existing lexicographic tie-break for equal outcomes.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -41,7 +43,7 @@ A wedding organizer supplies one scenario containing the available tables and al
 
 **Acceptance Scenarios**:
 
-1. **Given** a Scenario 2 input with five tables, four capacities of six, one capacity of seven, and 31 uniquely identified guests, **When** the organizer generates a plan, **Then** the result contains the five supplied table IDs, respects every supplied table capacity, and assigns every input guest exactly once.
+1. **Given** a Scenario 2 input with five base tables of capacity six and 31 uniquely identified guests, **When** the organizer generates a plan, **Then** the result contains the five supplied table IDs, assigns every input guest exactly once, and uses four tables of six guests plus the seventh chair at the table that yields the best overall seating plan.
 2. **Given** a valid scenario containing Bartek and Nina, **When** the organizer generates a plan, **Then** both are assigned to table `T1`.
 3. **Given** a valid scenario, **When** the organizer generates a plan twice without changing the scenario, **Then** both generated plans contain the same table assignments and guest order.
 
@@ -62,7 +64,7 @@ A wedding organizer receives a complete plan that uses the supplied guest groups
 3. **Given** guest descriptions indicating a preference for dancing, quiet conversation, food, or early departure, **When** a venue table has a relevant location note, **Then** the plan uses that location note when it does not conflict with a higher-priority seating constraint.
 4. **Given** the workation team lists in the challenge brief, **When** the organizer generates a seating plan, **Then** the plan does not treat those lists as wedding seating requirements.
 5. **Given** a guest whose description explicitly indicates dancing or smoke/terrace breaks, **When** the relevant venue table is available after higher-priority constraints, **Then** the plan prefers `T2` for dancing and `T4` for smoke/terrace breaks.
-6. **Given** the Scenario 2 roster, **When** a valid alternative exists after higher-priority constraints, **Then** Michał Z. and Jakub G. are not seated with Leszek and are not placed at a table dominated by work-team guests.
+6. **Given** the Scenario 2 roster, **When** a valid alternative exists after higher-priority constraints, **Then** Michał Z. and Jakub G. are not seated with Leszek and are not placed at a table containing four or more work-group guests.
 7. **Given** the Scenario 2 roster, **When** the organizer generates a plan, **Then** Michał S. is included exactly once and the plan does not turn the Bald Club history into a mandatory companion or separation rule.
 8. **Given** a valid Scenario 2 roster with at least two work-group guests other than Bartek, **When** the organizer generates a plan, **Then** `T1` contains Bartek, Nina, and exactly two additional guests whose group is `work`.
 
@@ -78,7 +80,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 
 **Acceptance Scenarios**:
 
-1. **Given** a Scenario 2 input whose guest count does not equal 31, whose total capacity is not 31, or whose table capacities are not four sixes and one seven, **When** the organizer generates a plan, **Then** generation fails with a message that states the invalid capacity or count and no output plan is produced.
+1. **Given** a Scenario 2 input whose guest count does not equal 31 or whose five base tables are not all capacity six, **When** the organizer generates a plan, **Then** generation fails with a message that states the invalid capacity or count and no output plan is produced.
 2. **Given** a scenario with duplicate guest IDs or a guest missing an ID, **When** the organizer generates a plan, **Then** generation fails with a message that identifies the invalid guest data and no output plan is produced.
 3. **Given** a scenario without Bartek, Nina, or table `T1`, **When** the organizer generates a plan, **Then** generation fails with a message that identifies the missing mandatory seating element and no output plan is produced.
 
@@ -86,7 +88,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 
 ### Edge Cases
 
-- The scenario does not contain exactly five tables, contains any capacity other than six or seven, has more or fewer than one seven-seat table, or has a total capacity other than 31: generation fails because the Scenario 2 venue is fixed at four tables of six and one table of seven.
+- The scenario does not contain exactly five base tables of capacity six or does not contain exactly 31 guests: generation fails because Scenario 2 permits exactly one solver-selected extra chair, producing four tables of six and one table of seven.
 - A Scenario 2 roster includes Donald T. or Jarosław K., omits Jakub G., Michał Z., or Michał S., or contains a guest other than the 31 active attendees: generation fails rather than silently generating a plan for a superseded guest list.
 - Fewer than two active work-group guests other than Bartek are available: generation fails because the mandatory `T1` composition cannot be satisfied.
 - A guest's group or description is absent or blank: the guest remains eligible for assignment, but no preference is inferred from the missing field.
@@ -99,9 +101,9 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 ### Functional Requirements
 
 - **FR-001**: The system MUST accept an input scenario path and an output plan path through `./run.sh <input.json> <output.json>`.
-- **FR-002**: The system MUST validate that the Scenario 2 input contains exactly five distinct tables, four with capacity six and one with capacity seven, and exactly 31 guests with unique non-empty IDs before producing a plan.
+- **FR-002**: The system MUST validate that the Scenario 2 input contains exactly five distinct base tables, each with capacity six, and exactly 31 guests with unique non-empty IDs before producing a plan.
 - **FR-003**: The system MUST validate that the scenario contains table `T1` and distinct guests identified as Bartek and Nina before producing a plan.
-- **FR-004**: The system MUST generate a plan that contains exactly one entry for each input table ID and the number of guest IDs specified by that table's capacity, yielding four six-guest entries and one seven-guest entry.
+- **FR-004**: The system MUST generate a plan that contains exactly one entry for each input table ID, with four six-guest entries and one seven-guest entry. It MUST choose the seven-guest table as part of maximizing the overall seating plan and use the lexicographically smallest final arrangement to break equal outcomes.
 - **FR-005**: The system MUST assign every input guest exactly once and MUST NOT introduce a guest ID absent from the input.
 - **FR-006**: The system MUST assign Bartek and Nina to `T1`.
 - **FR-007**: The system MUST write a result that conforms to the published wedding seating output schema and contains no additional output fields.
@@ -117,13 +119,13 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 - **FR-017**: The system MUST use a documented soft avoidance score for an explicitly flagged discussion pair. The score MUST NOT create a hard separation or override structural, mandatory, companion, or separation constraints.
 - **FR-018**: The system MUST assign Bartek and Nina to `T1` together with exactly two additional active guests whose group is `work`; Bartek does not count toward those two colleagues. This is a mandatory composition rule and takes precedence over all soft seating preferences.
 - **FR-019**: The system MUST reject a Scenario 2 roster that includes Donald T. or Jarosław K. or that omits Jakub G., Michał Z., or Michał S.
-- **FR-020**: After structural validity, mandatory couple placement, and any explicit hard companion or separation rules, the system MUST treat the Leszek--Michał Z. and Leszek--Jakub G. combinations as soft discussion-pair avoidances and MUST prefer not to place either newcomer at a table dominated by work-team guests.
+- **FR-020**: After structural validity, mandatory couple placement, and any explicit hard companion or separation rules, the system MUST treat the Leszek--Michał Z. and Leszek--Jakub G. combinations as soft discussion-pair avoidances and MUST prefer not to place either newcomer at a table containing four or more work-group guests.
 - **FR-021**: The system MUST NOT infer a mandatory companion, separation, or table placement for Michał S. from the Bald Club narrative alone.
 
 ### Key Entities *(include if feature involves data)*
 
 - **Seating Scenario**: The supplied wedding data set containing its identifier, tables, and guests.
-- **Table**: A venue location with an ID, display name, capacity, and location note that may affect seating preferences. Scenario 2 has four six-seat tables and one seven-seat table.
+- **Table**: A venue location with an ID, display name, base capacity, and location note that may affect seating preferences. Scenario 2 begins with five six-seat tables and allows the solver to add one chair to the table that yields the best plan.
 - **Guest**: An invited person identified by a unique ID, display name, group, and narrative description.
 - **Seating Policy**: A documented, evidence-backed rule that expresses a mandatory placement, separation, companion, location preference, or named-pair avoidance preference and its priority.
 - **Seating Plan**: The generated mapping of each table ID to its assigned guest IDs, with the count at each table equal to its approved capacity.
@@ -143,7 +145,7 @@ A wedding organizer is told why a scenario cannot produce a valid plan instead o
 ## Assumptions
 
 - The updated program's canonical scenario fixture is `input/scenario2.json`; it follows the existing scenario structure and contains tables and guests with stable IDs.
-- The Scenario 2 venue is fixed at five tables: four tables of six and exactly one table of seven; alternate room sizes and more than one added chair are outside this feature's scope.
+- The Scenario 2 input represents five base tables of six. The generated plan must assign four tables six guests and one solver-selected table seven guests; alternate room sizes and more than one added chair are outside this feature's scope.
 - The Scenario 2 active roster is exactly the 31 guests after removing Donald T. and Jarosław K. and adding Jakub G., Michał Z., and Michał S.
 - Bartek and Nina are identified by their guest IDs or names in the input scenario and must always be seated at `T1`.
 - Bartek's colleagues are guests whose group is `work`; Bartek is excluded when counting the exactly two work-group colleagues required at `T1`.
