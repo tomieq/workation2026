@@ -43,10 +43,11 @@
 | Mariusz explicitly likes Sławek M. | Companion: `mariusz` + `slawek_m` | Hard companion | An explicit named positive relationship. |
 | Jarosław names Donald and Sławek as a likely political-panel combination | Separate: `donald_t` + `jaroslaw_k`; `jaroslaw_k` + `slawek_m` | Hard separation | Explicit named high-risk conversation combinations. |
 | Ania, Świadek Kuba, and Tetiana are explicitly dance-oriented | Prefer `T2` | 300 | The strongest soft location cue: `T2` is beside the dance floor. |
+| Ania, Gosia, Kacper, Świadek Kuba, and Tetiana explicitly describe a lively, performance, or all-night celebration style | Shared table affinity | 100 per matching tablemate | Keeps compatible active participants together without forcing placement. |
 | Zosia explicitly seeks smoke breaks | Prefer `T4` | 300 | The strongest soft location cue: `T4` is beside the exit/terrace. |
 | Jacek, Leszek, and Paweł signal low energy, low-toast, or moderation needs | Prefer `T5` | 200 | A strong quiet-area preference, but below hard relationship rules. |
 | Klara, Przemek, and Tomek explicitly mention alcoholic drinks, spirits, or champagne | Shared table affinity | 75 per matching tablemate | A moderate shared drink interest; no bar location is supplied. |
 | Maciek and Jakub have an explicit food-intake contrast | Shared table affinity | 50 per matching tablemate | A weaker food conversation affinity; no food-service location is supplied. |
 | Supplied `group` field | Shared table affinity | 1 per matching tablemate | The final tie-breaking social preference only. |
 
-Hard structural and couple-placement rules take precedence over every row above. The workation-team lists remain excluded because the brief explicitly says they are not wedding-seating requirements.
+Hard structural and couple-placement rules take precedence over every row above. Ambiguous or non-preferential descriptions, including Piotr's unconfirmed dancing and Kuba S.'s wildcard behavior, remain unscored. The workation-team lists remain excluded because the brief explicitly says they are not wedding-seating requirements.

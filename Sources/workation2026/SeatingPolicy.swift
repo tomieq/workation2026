@@ -11,6 +11,7 @@ enum SeatingPolicyCatalogue {
             SeatingPolicy(kind: .locationPreference, guestIDs: ["chrzestna_ania", "swiadek_kuba", "tetiana"], tableID: "T2", priority: .location, evidence: "Descriptions explicitly mention dancing or the dance floor.", weight: 300),
             SeatingPolicy(kind: .locationPreference, guestIDs: ["zosia"], tableID: "T4", priority: .location, evidence: "Description explicitly mentions smoke breaks; T4 is nearest the exit/terrace.", weight: 300),
             SeatingPolicy(kind: .locationPreference, guestIDs: ["jacek", "leszek", "pawel"], tableID: "T5", priority: .location, evidence: "Descriptions explicitly indicate conserving energy or avoiding toast competition; T5 is the quieter area.", weight: 200),
+            SeatingPolicy(kind: .affinityPreference, guestIDs: ["chrzestna_ania", "gosia", "kacper", "swiadek_kuba", "tetiana"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly indicate dancing, a performance, or keeping the celebration going.", weight: 100),
             SeatingPolicy(kind: .affinityPreference, guestIDs: ["klara", "przemek", "tomek"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly mention alcohol, spirits, or champagne.", weight: 75),
             SeatingPolicy(kind: .affinityPreference, guestIDs: ["jakub", "maciek"], tableID: nil, priority: .affinity, evidence: "Descriptions explicitly describe contrasting eating habits.", weight: 50),
         ]

@@ -31,6 +31,7 @@ struct PolicyTests {
         #expect(policy(for: ["jacek", "leszek", "pawel"])?.weight == 200)
         #expect(policy(for: ["klara", "przemek", "tomek"])?.weight == 75)
         #expect(policy(for: ["jakub", "maciek"])?.weight == 50)
+        #expect(policy(for: ["chrzestna_ania", "gosia", "kacper", "swiadek_kuba", "tetiana"])?.weight == 100)
     }
 
     @Test
@@ -69,7 +70,7 @@ struct PolicyTests {
             tables: (1...5).map { VenueTable(id: "T\($0)", name: "Table", capacity: 6, notes: nil) },
             guests: [
                 "mariusz", "slawek_m", "donald_t", "jaroslaw_k", "chrzestna_ania", "swiadek_kuba",
-                "tetiana", "zosia", "jacek", "leszek", "pawel", "klara", "przemek", "tomek", "jakub", "maciek",
+                "tetiana", "gosia", "kacper", "zosia", "jacek", "leszek", "pawel", "klara", "przemek", "tomek", "jakub", "maciek",
             ].map { Guest(id: $0, name: $0, group: nil, description: nil) }
         )
     }
