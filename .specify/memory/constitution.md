@@ -1,15 +1,12 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 2.0.0
+- Version change: 2.0.0 → 2.1.0
 - Modified principles:
-  - 3. Separation of Concerns → 3. Separation of Concerns (CLI Boundaries)
-  - 5. Backend Architecture → 5. CLI Architecture Boundaries
-  - 6. Frontend Architecture → 6. I/O Adapters and Schema Contracts
-  - 7. Testing (expanded for CLI contract coverage)
-  - 10. Domain-Driven Design (DDD) and Domain Focus (aligned to CLI execution flow)
+  - 10. Domain-Driven Design (DDD) and Domain Focus (language alignment added)
+- Added principles:
+  - 11. English Artifact Language Policy
 - Added sections: None
-- Removed sections:
-  - None
+- Removed sections: None
 - Follow-up TODOs: None
 -->
 # Workation2026 Constitution
@@ -124,9 +121,27 @@ Key expectations:
   keep shell/file adapter logic outside the domain model.
 - Teams MUST add domain-focused tests that validate invariants and aggregate
   rules in addition to integration tests.
+- Teams MUST keep ubiquitous language in English across bounded contexts and
+  technical artifacts unless an explicit external contract mandates another
+  language.
 
 Rationale: A domain-first model preserves business integrity and keeps technical
 implementation choices subordinate to core problem semantics.
+
+### 11. English Artifact Language Policy
+Source challenge briefs and context MAY be provided in Polish. All project
+artifacts produced by the team MUST be in English, including specs, plans,
+tasks, architecture documentation, ADRs, code identifiers, comments, tests,
+commit messages where feasible in the workflow, and user-facing
+outputs/contracts unless an external contract explicitly requires another
+language.
+
+When requirements are translated from Polish to English, teams MUST preserve
+original intent and MUST explicitly note ambiguities, uncertainty, or possible
+alternative interpretations before implementation decisions are finalized.
+
+Rationale: A single delivery language reduces collaboration friction, keeps
+reviews consistent, and prevents requirement drift during translation.
 
 ## Purpose and Scope
 Purpose: Build and maintain a Kotlin CLI challenge deliverable executed as
@@ -145,6 +160,10 @@ When choosing between implementations:
 4. Teams MUST prefer testability over shortcut implementations.
 5. Teams MUST reject designs that blur domain/application/infrastructure/adapter
    boundaries.
+6. Teams MUST produce delivery artifacts in English unless an external contract
+   explicitly requires another language.
+7. Teams MUST record translation ambiguities when converting Polish source
+   requirements to English.
 
 ### Architectural Expectations
 - The project MUST be split into modules by responsibility.
@@ -153,6 +172,8 @@ When choosing between implementations:
 - CLI and schema contracts MUST be explicit, stable, and versioned when changed.
 - Public APIs MUST stay small and intentional.
 - The canonical execution path MUST remain `./run.sh <input.json> <output.json>`.
+- Team-produced artifacts and technical communication in-repo MUST be in
+  English unless an explicit external contract states otherwise.
 
 ### Forbidden Patterns
 - Monolithic structure
@@ -164,6 +185,8 @@ When choosing between implementations:
 - Overengineering
 - Business logic inside CLI argument parsing or JSON serialization code
 - Persistence logic inside domain objects
+- Polish-language artifacts committed as final project deliverables without an
+  explicit external language requirement
 
 ## Governance
 This constitution supersedes other development preferences where conflicts
@@ -185,5 +208,10 @@ Compliance review expectations:
   document explicit compliance decisions.
 - Periodic governance audits MUST be performed to detect drift and propose
   amendments.
+- Reviews MUST verify that committed specs, plans, tasks, ADRs, code
+  identifiers/comments, tests, and user-facing contracts are in English unless
+  an explicit external language requirement is documented.
+- When source requirements originated in Polish, reviews MUST confirm that
+  translations preserve intent and that ambiguities are documented.
 
-**Version**: 2.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
+**Version**: 2.1.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
