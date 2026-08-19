@@ -61,3 +61,5 @@ Generate a seating plan with exactly two paths:
 The program validates the fixed five-table venue and 30 unique guests, places Bartek and Nina at `T1`, and writes a canonical JSON plan only after complete validation. It publishes through a temporary sibling file, so an existing output is retained if decoding, validation, planning, or encoding fails.
 
 Output is deterministic: repeated invocations with the same input create byte-identical files. The built-in evidence catalogue prefers the dance floor (`T2`) for explicitly dance-oriented guests and the exit/terrace (`T4`) for the explicit smoke-break preference; group membership is only a final soft preference. Provider credentials are not read from input or written to output.
+
+An optional SwiftAgent proposal pass is enabled only when all of these environment variables are set: `SWIFT_AGENT_PROVIDER` (`openAI` or `ollama`), `SWIFT_AGENT_MODEL_URL`, and `SWIFT_AGENT_MODEL`; `SWIFT_AGENT_AUTH_TOKEN` is optional. A missing, unavailable, malformed, or unsupported assistant proposal is ignored and the deterministic built-in plan is still generated.

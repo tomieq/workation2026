@@ -27,10 +27,12 @@ enum SeatingPolicyCatalogue {
     static func validated(_ candidates: [SeatingPolicy], for scenario: SeatingScenario) -> [SeatingPolicy] {
         let guestIDs = Set(scenario.guests.map(\.id))
         let tableIDs = Set(scenario.tables.map(\.id))
+        let evidenceSources = scenario.tables.compactMap(\.notes) + scenario.guests.compactMap(\.description)
         return candidates.filter { policy in
             guard !policy.guestIDs.isEmpty,
                   Set(policy.guestIDs).isSubset(of: guestIDs),
-                  !policy.evidence.isEmpty else { return false }
+                  !policy.evidence.isEmpty,
+                  evidenceSources.contains(where: { $0.range(of: policy.evidence, options: .caseInsensitive) != nil }) else { return false }
             switch policy.kind {
             case .mandatoryTable:
                 return policy.priority == .mandatory && policy.tableID == "T1"

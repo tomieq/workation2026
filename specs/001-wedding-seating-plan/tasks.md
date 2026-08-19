@@ -69,14 +69,14 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 ### Tests for User Story 2
 
 - [X] T014 [P] [US2] Add public-evidence catalogue and policy-candidate rejection tests in `Tests/workation2026Tests/PolicyTests.swift`
-- [ ] T015 [P] [US2] Add planner tests for hard relationship pruning and ordered location/group scoring in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [X] T015 [P] [US2] Add planner tests for hard relationship pruning and ordered location/group scoring in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
 
 ### Implementation for User Story 2
 
 - [X] T016 [US2] Implement the built-in public-evidence policy catalogue, priority validation, and exact evidence checks in `Sources/workation2026/SeatingPolicy.swift`
-- [ ] T017 [US2] Extend the deterministic planner to enforce separation/companion policies and score location then group preferences in `Sources/workation2026/DeterministicPlanner.swift`
-- [ ] T018 [US2] Implement optional environment-configured SwiftAgent policy proposals with non-fatal fallback and strict candidate validation in `Sources/workation2026/PolicyAssistant.swift`
-- [ ] T019 [US2] Integrate validated built-in and optional assistant policies without permitting assistant output to bypass deterministic planning in `Sources/workation2026/App.swift`
+- [X] T017 [US2] Extend the deterministic planner to enforce separation/companion policies and score location then group preferences in `Sources/workation2026/DeterministicPlanner.swift`
+- [X] T018 [US2] Implement optional environment-configured SwiftAgent policy proposals with non-fatal fallback and strict candidate validation in `Sources/workation2026/PolicyAssistant.swift`
+- [X] T019 [US2] Integrate validated built-in and optional assistant policies without permitting assistant output to bypass deterministic planning in `Sources/workation2026/App.swift`
 
 **Checkpoint**: Social choices are traceable to public evidence, higher-priority constraints win, and a missing or failed assistant still yields the deterministic built-in plan.
 
@@ -91,7 +91,7 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 ### Tests for User Story 3
 
 - [X] T020 [P] [US3] Add validation unit tests for duplicate or blank guest IDs, fixed venue/count violations, and missing mandatory seating elements in `Tests/workation2026Tests/ValidationTests.swift`
-- [ ] T021 [P] [US3] Add CLI integration tests for malformed input, specific error reporting, write failure, and unchanged existing output in `Tests/workation2026Tests/CLIRunTests.swift`
+- [X] T021 [P] [US3] Add CLI integration tests for malformed input, specific error reporting, write failure, and unchanged existing output in `Tests/workation2026Tests/CLIRunTests.swift`
 
 ### Implementation for User Story 3
 
@@ -109,7 +109,7 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 - [X] T024 [P] Document the final invocation, optional environment configuration, deterministic behavior, and failure guarantees in `README.md`
 - [X] T025 Run the documented package and CLI verification sequence from `specs/001-wedding-seating-plan/quickstart.md`
 - [X] T026 Validate the generated output against `contract/output-schema.json` and record any unavoidable lower-priority policy trade-offs in `specs/001-wedding-seating-plan/research.md`
-- [ ] T027 Verify a valid supplied scenario completes within 10 seconds and leaves no credentials in output or diagnostics in `Tests/workation2026Tests/CLIRunTests.swift`
+- [X] T027 Verify a valid supplied scenario completes within 10 seconds and leaves no credentials in output or diagnostics in `Tests/workation2026Tests/CLIRunTests.swift`
 
 ---
 

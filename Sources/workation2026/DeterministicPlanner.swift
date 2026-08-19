@@ -49,7 +49,7 @@ enum DeterministicPlanner {
     ) -> String? {
         tableIDs.compactMap { tableID -> (tableID: String, score: Int)? in
             let occupants = assignments[tableID, default: []]
-            guard occupants.count < 6, respectsHardPolicies(guestID, tableID: tableID, occupants: occupants, policies: policies) else {
+            guard occupants.count < 6, respectsHardPolicies(guestID, tableID: tableID, assignments: assignments, policies: policies) else {
                 return nil
             }
             return (tableID, score(for: guestID, tableID: tableID, occupants: occupants, guestsByID: guestsByID, policies: policies))
@@ -59,7 +59,8 @@ enum DeterministicPlanner {
         .tableID
     }
 
-    private static func respectsHardPolicies(_ guestID: String, tableID: String, occupants: [String], policies: [SeatingPolicy]) -> Bool {
+    private static func respectsHardPolicies(_ guestID: String, tableID: String, assignments: [String: [String]], policies: [SeatingPolicy]) -> Bool {
+        let occupants = assignments[tableID, default: []]
         for policy in policies {
             switch policy.kind {
             case .mandatoryTable:
@@ -68,12 +69,10 @@ enum DeterministicPlanner {
                 if policy.guestIDs.contains(guestID), policy.guestIDs.contains(where: occupants.contains) { return false }
             case .companion:
                 if policy.guestIDs.contains(guestID) {
-                    let assignedCompanions = policy.guestIDs.filter { $0 != guestID && occupants.contains($0) }
-                    let elsewhere = policy.guestIDs.contains { companion in
-                        companion != guestID && !occupants.contains(companion) && !policy.guestIDs.contains(guestID)
-                    }
-                    if !assignedCompanions.isEmpty { continue }
-                    if elsewhere { return false }
+                    let assignedTable = assignments.first { _, assignedGuests in
+                        policy.guestIDs.contains { $0 != guestID && assignedGuests.contains($0) }
+                    }?.key
+                    if let assignedTable, assignedTable != tableID { return false }
                 }
             case .locationPreference, .groupPreference:
                 continue
@@ -110,7 +109,16 @@ enum DeterministicPlanner {
 
     private static func preferenceWeight(for guestID: String, policies: [SeatingPolicy]) -> Int {
         policies.filter { $0.guestIDs.contains(guestID) }.reduce(0) { total, policy in
-            total + (policy.kind == .locationPreference ? 1 : 0)
+            switch policy.kind {
+            case .companion:
+                return total + 10_000
+            case .separate:
+                return total + 1_000
+            case .locationPreference:
+                return total + 100
+            case .mandatoryTable, .groupPreference:
+                return total
+            }
         }
     }
 }

@@ -25,6 +25,25 @@ struct DeterministicPlannerTests {
         #expect(first.tables[0].guests == ["bartek", "guest1", "guest10", "guest11", "guest12", "nina"])
     }
 
+    @Test
+    func enforcesCompanionAndSeparationPoliciesBeforeSoftPreferences() throws {
+        let scenario = plannerScenario()
+        let policies = [
+            SeatingPolicy(kind: .companion, guestIDs: ["guest1", "guest20"], tableID: nil, priority: .companion, evidence: "named companions"),
+            SeatingPolicy(kind: .separate, guestIDs: ["guest2", "guest3"], tableID: nil, priority: .separation, evidence: "named conflict"),
+            SeatingPolicy(kind: .locationPreference, guestIDs: ["guest4"], tableID: "T4", priority: .location, evidence: "location cue"),
+        ]
+
+        let plan = try DeterministicPlanner.plan(for: scenario, policies: policies)
+        let tableForGuest = Dictionary(uniqueKeysWithValues: plan.tables.flatMap { table in
+            table.guests.map { ($0, table.tableId) }
+        })
+
+        #expect(tableForGuest["guest1"] == tableForGuest["guest20"])
+        #expect(tableForGuest["guest2"] != tableForGuest["guest3"])
+        #expect(tableForGuest["guest4"] == "T4")
+    }
+
     private func plannerScenario() -> SeatingScenario {
         let guests = (1...28).map { Guest(id: "guest\($0)", name: "Guest \($0)", group: nil, description: nil) }
             + [Guest(id: "bartek", name: "Bartek", group: nil, description: nil), Guest(id: "nina", name: "Nina", group: nil, description: nil)]

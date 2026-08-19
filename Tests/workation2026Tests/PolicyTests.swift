@@ -21,6 +21,11 @@ struct PolicyTests {
         #expect(SeatingPolicyCatalogue.validated([invalid], for: scenario).isEmpty)
     }
 
+    @Test
+    func missingAssistantConfigurationFallsBackWithoutPolicies() async {
+        #expect(await PolicyAssistant.proposedPolicies(for: policyScenario(), environment: [:]).isEmpty)
+    }
+
     private func policyScenario() -> SeatingScenario {
         SeatingScenario(
             scenario: "test",

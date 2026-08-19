@@ -1,16 +1,16 @@
 import Foundation
 
 enum Application {
-    static func main() {
+    static func main() async {
         do {
-            try run(arguments: Array(CommandLine.arguments.dropFirst()))
+            try await run(arguments: Array(CommandLine.arguments.dropFirst()))
         } catch {
             FileHandle.standardError.write(Data("Error: \(errorDescription(error))\n".utf8))
             Foundation.exit(1)
         }
     }
 
-    static func run(arguments: [String]) throws {
+    static func run(arguments: [String]) async throws {
         guard arguments.count == 2 else {
             throw CLIError.invalidArguments
         }
@@ -29,7 +29,9 @@ enum Application {
             throw CLIError.inputDecodeFailed(error)
         }
         try ScenarioValidator.validate(scenario)
-        let plan = try DeterministicPlanner.plan(for: scenario, policies: SeatingPolicyCatalogue.policies(for: scenario))
+        let builtInPolicies = SeatingPolicyCatalogue.policies(for: scenario)
+        let assistantPolicies = await PolicyAssistant.proposedPolicies(for: scenario)
+        let plan = try DeterministicPlanner.plan(for: scenario, policies: builtInPolicies + assistantPolicies)
         try PlanValidator.validate(plan, for: scenario)
         try PlanPublisher.publish(plan, to: outputURL)
     }
