@@ -1,0 +1,60 @@
+{
+  "tables" : [
+    {
+      "guests" : [
+        "bartek",
+        "jakub",
+        "kuba_g",
+        "maciek",
+        "michal_z",
+        "nina"
+      ],
+      "tableId" : "T1"
+    },
+    {
+      "guests" : [
+        "chrzestna_ania",
+        "gosia",
+        "kacper",
+        "mariusz",
+        "slawek_m",
+        "swiadek_kuba",
+        "tetiana"
+      ],
+      "tableId" : "T2"
+    },
+    {
+      "guests" : [
+        "babcia_ela",
+        "mama_ela",
+        "michal_s",
+        "oliwia",
+        "piotr",
+        "zdzisiek"
+      ],
+      "tableId" : "T3"
+    },
+    {
+      "guests" : [
+        "ada",
+        "agnieszka",
+        "klara",
+        "przemek",
+        "tomek",
+        "zosia"
+      ],
+      "tableId" : "T4"
+    },
+    {
+      "guests" : [
+        "amelka",
+        "jacek",
+        "kuba_s",
+        "leszek",
+        "michal",
+        "pawel"
+      ],
+      "tableId" : "T5"
+    }
+  ]
+}

@@ -22,7 +22,7 @@ Na starcie macie:
 
 - `challenge/BRIEF.md` — problem i lista gości,
 - `challenge/room-layout.png` — układ sali,
-- `input/scenario1.json` — dane wejściowe,
+- `input/scenario2.json` — dane wejściowe dla aktualnego scenariusza,
 - `contract/output-schema.json` — minimalny kontrakt wyniku,
 - `bootstrap-spec-kit.sh` — inicjalizacja Spec Kit,
 - pusty katalog `src/`.
@@ -55,11 +55,11 @@ swift test
 Generate a seating plan with exactly two paths:
 
 ```bash
-./run.sh input/scenario1.json output/seating-plan.json
+./run.sh input/scenario2.json output/scenario2-plan.json
 ```
 
-The program validates the fixed five-table venue and 30 unique guests, places Bartek and Nina at `T1`, and writes a canonical JSON plan only after complete validation. It publishes through a temporary sibling file, so an existing output is retained if decoding, validation, planning, or encoding fails.
+The program validates five base six-seat tables, 31 active guests, and one extra chair that the solver assigns to the best table. The output has four six-guest tables and one seven-guest table. `T1` contains Bartek, Nina, and exactly two additional work-group guests. It publishes through a temporary sibling file, so an existing output is retained if decoding, validation, planning, or encoding fails.
 
 Output is deterministic: repeated invocations with the same input create byte-identical files. The built-in evidence catalogue prefers the dance floor (`T2`) for explicitly dance-oriented guests, the exit/terrace (`T4`) for the explicit smoke-break preference, and quiet `T5` for explicit low-energy or low-toast signals. It also uses explicit food and drink descriptions as a soft table-mate affinity when the input offers no food or bar location; group membership remains the final soft preference. Provider credentials are not read from input or written to output.
 
-An optional SwiftAgent proposal pass reads `.env` through `Env`. Start with [`.env.example`](.env.example), then enter `SWIFT_AGENT_AUTH_TOKEN` directly in an untracked `.env` file. The supplied default is OpenAI at `https://api.openai.com/v1/` with `gpt-5.4-mini`; `SWIFT_AGENT_PROVIDER`, `SWIFT_AGENT_MODEL_URL`, and `SWIFT_AGENT_MODEL` can override it. A missing, unavailable, malformed, or unsupported assistant proposal is ignored and the deterministic built-in plan is still generated.
+An optional SwiftAgent proposal pass may inspect narrative evidence, but it never changes the generated seating plan. The deterministic built-in catalogue is the sole planning input, so identical Scenario 2 inputs produce byte-identical outputs regardless of assistant availability or configuration.
