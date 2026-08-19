@@ -12,7 +12,7 @@ Nie instalujecie osobnego Copilot CLI i nie konfigurujecie VS Code.
 
 ## Kontrakt uruchomienia
 
-Wasz wynik ma być programem w Kotlinie uruchamianym jako:
+Wasz wynik ma być programem w Swift uruchamianym jako:
 
 ```bash
 ./run.sh <input.json> <output.json>

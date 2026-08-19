@@ -6,4 +6,4 @@ The solution MUST follow the Spec Kit / Spec-Driven Development workflow. Do not
 
 The public challenge brief is the source of business context. Do not invent private scoring rules or assume hidden organizer knowledge.
 
-The final deliverable must remain a Kotlin program callable as `./run.sh <input.json> <output.json>`. Do not replace the program with a manually curated final JSON.
+The final deliverable must remain a Swift program callable as `./run.sh <input.json> <output.json>`. Do not replace the program with a manually curated final JSON.

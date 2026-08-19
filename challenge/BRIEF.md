@@ -31,7 +31,7 @@ Tym razem jednak kod napiszecie Wy.
 
 # Wasza misja
 
-Zbudujcie w Kotlinie program, który na podstawie dostarczonego JSON-a z informacjami o gościach wygeneruje JSON z planem ich usadzenia.
+Zbudujcie w Swift program, który na podstawie dostarczonego JSON-a z informacjami o gościach wygeneruje JSON z planem ich usadzenia.
 
 Cel jest prosty:
 
@@ -41,8 +41,8 @@ Nie szukamy ręcznie przygotowanego `seating-plan.json`.
 
 Nie szukamy również:
 
-```kotlin
-guests.sortedBy { it.name }.chunked(6)
+```swift
+guests.sorted { $0.name < $1.name }.chunked(into: 6)
 ```
 
 i komentarza:
@@ -877,7 +877,7 @@ Macie:
 
 **30 miejsc.**
 
-**Kotlin.**
+**Swift.**
 
 **GitHub Copilot.**
 
