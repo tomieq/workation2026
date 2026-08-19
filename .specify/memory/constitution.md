@@ -1,50 +1,76 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+Version change: unversioned template -> 1.0.0
+Modified principles: none; initial constitution created from template
+Added sections: Delivery Constraints; Spec-Driven Workflow
+Removed sections: none
+Follow-up TODOs: none
+-->
+
+# Wedding Seating Challenge Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Evidence-Based Requirement Extraction
+The team MUST derive requirements only from the public challenge brief, input data, and published
+output contract. Narrative guest descriptions MUST be examined for actionable seating signals, while
+unsupported organizer intent, private scoring rules, and invented constraints MUST NOT be assumed.
+This keeps decisions traceable to the material available to every participant.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Language-Neutral, Replaceable Implementation
+The specification, domain model, algorithm design, and acceptance criteria MUST remain independent
+of Kotlin, Swift, SPM, Gradle, or any other implementation technology until the team records its
+implementation choice in the technical plan. Each implementation-facing decision MUST identify the
+stable behavior it preserves so either team member can implement or review it. This enables a joint
+Swift/Kotlin team to choose tooling without prematurely constraining the solution.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Contract-Valid Seating Is Non-Negotiable
+Every produced seating plan MUST honor the published JSON output schema, assign exactly 30 distinct
+guests to five tables of six, and place Bartek and Nina at `T1`. The executable delivery boundary MUST
+remain `./run.sh <input.json> <output.json>` regardless of the chosen implementation language. These
+invariants define a usable result before any optimization quality is considered.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Deterministic, Verifiable Optimization
+The solver MUST be deterministic for identical input and configuration, and its outcome MUST be
+verifiable against explicit rules derived during specification and clarification. Tests MUST cover
+structural validity, mandatory placements, and representative preference or conflict cases before a
+candidate implementation is accepted. Determinism and focused checks make behavior reviewable rather
+than dependent on one fortunate run.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Simplicity and Explainability
+The team MUST select the simplest search or optimization strategy that demonstrably satisfies the
+specified rules and quality criteria. New abstractions, heuristics, or dependencies MUST have a
+written purpose in the plan and MUST be removable without changing the external contract. The plan
+MUST explain how the chosen approach converts relevant guest information into seating decisions, so
+reviewers can challenge assumptions and reproduce results.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Delivery Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+The final deliverable MUST be a program, not a manually curated output JSON, and it MUST generate
+its result from the supplied input. It MUST read the input path and write the output path passed to
+`run.sh`; errors MUST be reported clearly and MUST NOT silently emit an invalid plan. The project MAY
+choose Kotlin, Swift/SPM, or another agreed runtime only after the technical plan records how the
+chosen toolchain supports the required invocation and contract.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Spec-Driven Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+Work MUST proceed through this order: constitution, specify, clarify, plan, checklist, tasks, analyze,
+implement, and converge. No application source, solver design, or final seating arrangement MAY be
+considered authoritative before the relevant prior artifacts exist and their open ambiguities are
+recorded or resolved. Each review MUST check this constitution, the output contract, and the current
+Spec Kit artifacts for consistency before advancing to the next phase.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes informal development preferences for this challenge. Amendments MUST be
+proposed as a documented change to this file, reviewed by the team, and accompanied by updates to
+any affected Spec Kit artifacts before dependent work proceeds. Compliance review is required when
+creating or approving specifications, plans, tasks, implementation changes, and the final convergence
+assessment.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Versioning uses semantic versioning: MAJOR for incompatible principle removal or redefinition, MINOR
+for a new principle or materially expanded governance, and PATCH for clarifications or wording that
+does not alter policy. The current implementation-language choice belongs in the technical plan, not
+in this constitution, unless the team later adopts a permanent language requirement.
+
+**Version**: 1.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
