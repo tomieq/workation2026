@@ -9,16 +9,16 @@ description: "Implementation tasks for the Wedding Seating Plan feature"
 
 **Prerequisites**: [plan.md](plan.md), [spec.md](spec.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/cli-contract.md](contracts/cli-contract.md), [quickstart.md](quickstart.md)
 
-**Tests**: XCTest and shell-level integration checks are required by the feature specification and implementation plan.
+**Tests**: Swift Testing and shell-level integration checks are required by the feature specification and implementation plan.
 
 **Organization**: Tasks are grouped by user story so each increment can be implemented and validated independently.
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Prepare the SwiftPM executable and XCTest targets required by every story.
+**Purpose**: Prepare the SwiftPM executable and Swift Testing targets required by every story.
 
 - [ ] T001 Update the Swift 6.2 executable target and SwiftAgent package dependency in `Package.swift`
-- [ ] T002 [P] Create the XCTest target directory and test target declaration for `Tests/workation2026Tests/`
+- [ ] T002 [P] Create the Swift Testing target directory and test target declaration for `Tests/workation2026Tests/`
 - [ ] T003 Update the executable launcher to forward exactly two input/output paths in `run.sh`
 
 ---
@@ -133,7 +133,7 @@ Setup -> Foundational -> US1 (MVP) -> US2 -> Polish
 
 ### Within Each Story
 
-- Write the listed XCTest checks before their corresponding implementation task and confirm they fail for the intended behavior.
+- Write the listed Swift Testing checks before their corresponding implementation task and confirm they fail for the intended behavior.
 - Keep structural and mandatory constraints ahead of all policy scoring.
 - Run the story's independent test before beginning the next checkpoint.
 

@@ -18,7 +18,7 @@ Build a SwiftPM command-line program that validates a fixed five-table wedding s
 
 **Storage**: Input and output JSON files only; no persistent data store
 
-**Testing**: XCTest via `swift test`; shell-level integration checks through `./run.sh`
+**Testing**: Swift Testing via `swift test`; shell-level integration checks through `./run.sh`
 
 **Target Platform**: macOS challenge environment; SwiftAgent also supports Linux for portable SwiftPM builds
 
@@ -37,7 +37,7 @@ Build a SwiftPM command-line program that validates a fixed five-table wedding s
 | Constitution principle | Design response | Status |
 |---|---|---|
 | Evidence-Based Requirement Extraction | Policies are a static catalogue sourced only from the brief, scenario fields, and table notes. Workation teams are excluded. | Pass |
-| Swift Package Manager Implementation | `Package.swift` declares SwiftAgent and the `workation2026` executable; all source and XCTest targets use SwiftPM. | Pass |
+| Swift Package Manager Implementation | `Package.swift` declares SwiftAgent and the `workation2026` executable; all source and Swift Testing targets use SwiftPM. | Pass |
 | Contract-Valid Swift Executable Is Non-Negotiable | `run.sh` delegates to the executable; decoding, structural validation, result validation, and atomic publication guard the contract. | Pass |
 | Deterministic, Verifiable Optimization | The application-owned optimizer enforces hard rules, scores documented preferences, and chooses the lexicographically smallest tied arrangement. SwiftAgent policy suggestions require deterministic validation and cannot bypass this result. | Pass |
 | Simplicity and Explainability | A single executable module separates decoding, policy extraction, deterministic planning, agent orchestration, and JSON encoding without a persistence layer or framework. | Pass |
@@ -79,7 +79,7 @@ Tests/
   └── CLIRunTests.swift
 ```
 
-**Structure Decision**: Use one SwiftPM executable target and one XCTest target. The module boundaries above keep JSON contracts, public-evidence policy interpretation, deterministic solver behavior, and optional provider integration independently testable without introducing packages or a service boundary.
+**Structure Decision**: Use one SwiftPM executable target and one Swift Testing target. The module boundaries above keep JSON contracts, public-evidence policy interpretation, deterministic solver behavior, and optional provider integration independently testable without introducing packages or a service boundary.
 
 ## Complexity Tracking
 
