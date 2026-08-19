@@ -18,12 +18,17 @@ enum PolicyAssistant {
             ))
             let response = try await agent.session(systemMessage: "Return only JSON policy proposals based on exact evidence supplied in the prompt.")
                 .ask(prompt(for: scenario), model: configuration.model)
-            guard case let .text(text) = response.sessionReponse,
-                  let proposal = try? JSONDecoder().decode(Proposal.self, from: Data(text.utf8)) else {
+            guard case let .text(text) = response.sessionReponse else {
+                print("invalid response")
+                return []
+            }
+            guard let proposal = try? JSONDecoder().decode(Proposal.self, from: Data(text.utf8)) else {
+                print("invalid proposal")
                 return []
             }
             return SeatingPolicyCatalogue.validated(proposal.policies.compactMap(\.policy), for: scenario)
         } catch {
+            print("Error: \(error)")
             return []
         }
     }
