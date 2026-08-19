@@ -48,6 +48,7 @@ enum SeatingPolicyKind: String, Codable, CaseIterable {
     case locationPreference
     case avoidancePreference
     case workClusterAvoidance
+    case riskClusterAvoidance
     case affinityPreference
     case groupPreference
 }

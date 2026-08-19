@@ -135,7 +135,7 @@ enum DeterministicPlanner {
                     }?.key
                     if let assignedTable, assignedTable != tableID { return false }
                 }
-            case .locationPreference, .avoidancePreference, .workClusterAvoidance, .affinityPreference, .groupPreference:
+            case .locationPreference, .avoidancePreference, .workClusterAvoidance, .riskClusterAvoidance, .affinityPreference, .groupPreference:
                 continue
             }
         }
@@ -160,6 +160,10 @@ enum DeterministicPlanner {
                 result -= occupants.filter(policy.guestIDs.contains).count * policy.weight
             case .workClusterAvoidance:
                 if occupants.filter({ guestsByID[$0]?.group == "work" }).count >= 4 {
+                    result -= policy.weight
+                }
+            case .riskClusterAvoidance:
+                if occupants.filter(policy.guestIDs.contains).count >= 3 {
                     result -= policy.weight
                 }
             case .affinityPreference:
@@ -188,6 +192,8 @@ enum DeterministicPlanner {
             case .avoidancePreference:
                 return total + policy.weight
             case .workClusterAvoidance:
+                return total + policy.weight
+            case .riskClusterAvoidance:
                 return total + policy.weight
             case .affinityPreference:
                 return total + policy.weight
