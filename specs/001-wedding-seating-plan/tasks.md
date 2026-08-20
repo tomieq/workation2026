@@ -1,9 +1,9 @@
 ---
 
-description: "Scenario 2 implementation tasks for the Wedding Seating Plan"
+description: "Scenario 2 and narrative catalogue implementation tasks for the Wedding Seating Plan"
 ---
 
-# Tasks: Wedding Seating Plan - Scenario 2
+# Tasks: Wedding Seating Plan - Scenario 2 Narrative Catalogue
 
 **Input**: Design documents from `/specs/001-wedding-seating-plan/`
 
@@ -11,7 +11,7 @@ description: "Scenario 2 implementation tasks for the Wedding Seating Plan"
 
 **Tests**: Swift Testing and CLI integration coverage are required by the specification, constitution, and implementation plan. Write each listed test before the task it verifies and confirm it fails first.
 
-**Organization**: Tasks are grouped by user story so each increment is independently implementable and testable.
+**Organization**: T001-T031 record the completed Scenario 2 increment. T032 onward implement the narrative-catalogue amendment and are grouped by user story so each new increment is independently implementable and testable.
 
 ## Phase 1: Setup (Shared Infrastructure)
 
@@ -117,62 +117,171 @@ description: "Scenario 2 implementation tasks for the Wedding Seating Plan"
 
 ---
 
+## Phase 7: Narrative Catalogue Setup (Shared Infrastructure)
+
+**Purpose**: Establish the amended design baseline and reusable test support without changing the public CLI contract.
+
+- [X] T032 Record the pre-amendment Swift test baseline and current `input/scenario2.json` output in `specs/001-wedding-seating-plan/research.md`
+- [X] T033 [P] Add reusable Scenario 2 evidence and table-assignment test helpers in `Tests/workation2026Tests/PolicyTests.swift`
+- [X] T034 [P] Add reusable category-objective and hard-invariant test helpers in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+
+**Checkpoint**: The existing implementation baseline is recorded and tests can express exact evidence, category scores, assignment locations, and hard-invariant checks.
+
+---
+
+## Phase 8: Narrative Catalogue Foundation (Blocking Prerequisites)
+
+**Purpose**: Add the shared types and validation boundary required by every amended user-story task.
+
+**Critical**: Complete this phase before starting T039 or later tasks.
+
+- [ ] T035 Add `CompetitionCategory`, `EvidenceSource`, `EvidenceCatalogueEntry`, category-tagged soft `SeatingPolicy`, `CategoryScore`, and `PlanObjective` types in `Sources/workation2026/Models.swift`
+- [ ] T036 Replace hard narrative policy kinds and priorities with soft relationship, location, grouping, balance, and risk effects in `Sources/workation2026/Models.swift`
+- [ ] T037 Add exact-evidence, category, source-identity, non-actionable-reason, and duplicate-effect validation APIs in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T038 Restrict optional assistant policy decoding to categorized soft effects with exact source evidence in `Sources/workation2026/PolicyAssistant.swift`
+
+**Checkpoint**: The code can represent and validate the complete catalogue without exposing catalogue types through `SeatingPlan`.
+
+---
+
+## Phase 9: User Story 1 Amendment - Preserve a Valid Complete Plan (Priority: P1) MVP
+
+**Goal**: Preserve all structural Scenario 2 guarantees while ensuring no narrative policy can invalidate an otherwise valid plan.
+
+**Independent Test**: Run the focused planner and CLI tests; verify `[6,6,6,6,7]`, all 31 IDs exactly once, Bartek and Nina at `T1`, exactly two additional `work` guests at `T1`, deterministic output, and no hard companion or separation enforcement.
+
+### Tests for User Story 1 Amendment
+
+- [ ] T039 [P] [US1] Add focused tests proving relationship affinity and avoidance cannot override capacity, uniqueness, couple placement, or exact `T1` composition in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [ ] T040 [P] [US1] Add an end-to-end regression test proving narrative catalogue data does not add output JSON properties in `Tests/workation2026Tests/CLIRunTests.swift`
+
+### Implementation for User Story 1 Amendment
+
+- [ ] T041 [US1] Remove narrative companion and separation checks from hard candidate validation while retaining all four approved hard-constraint classes in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T042 [US1] Keep catalogue validation and policy evaluation internal to planning and preserve atomic schema-shaped publication in `Sources/workation2026/App.swift`
+
+**Checkpoint**: User Story 1 remains independently valid and deterministic with every narrative signal treated as soft.
+
+---
+
+## Phase 10: User Story 2 Amendment - Optimize Across the Complete Catalogue (Priority: P2)
+
+**Goal**: Account for every Scenario 2 guest description and table note through auditable soft effects across all six competition categories.
+
+**Independent Test**: Audit 36 exact evidence entries, then run focused policy and planner tests demonstrating each actionable effect, every non-actionable reason, six-category scoring, duplicate suppression, table-note locations, named relationships, `T1` preferences, balance, risk dispersion, and deterministic tie-breaking.
+
+### Tests for User Story 2 Amendment
+
+- [ ] T043 [P] [US2] Add a catalogue audit test for exactly 31 guest descriptions and five table notes with exact text, unique sources, valid categories, and explicit non-actionable reasons in `Tests/workation2026Tests/PolicyTests.swift`
+- [ ] T044 [US2] Add table-driven focused tests covering every actionable guest and table catalogue effect plus Piotr and cosmetic-detail non-actionability in `Tests/workation2026Tests/PolicyTests.swift`
+- [ ] T045 [US2] Add assistant-policy tests for exact evidence, known source IDs, allowed soft categories, duplicate rejection, and hard-policy rejection in `Tests/workation2026Tests/PolicyTests.swift`
+- [ ] T046 [P] [US2] Add objective tests for all six category totals, one-contribution-per-evidence/category behavior, total/category/canonical comparison order, and soft relationship scoring in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [ ] T047 [US2] Add pair-swap tests showing later guests can improve Bartek/newcomer affinity, Mariusz/Sławek affinity, Leszek avoidance, location use, balance, and risk without violating hard constraints in `Tests/workation2026Tests/DeterministicPlannerTests.swift`
+- [ ] T048 [P] [US2] Add Scenario 2 CLI assertions for all six competition categories and unchanged schema shape in `Tests/workation2026Tests/CLIRunTests.swift`
+
+### Implementation for User Story 2 Amendment
+
+- [ ] T049 [US2] Build the five exact table-note catalogue entries and their `T1` through `T5` soft effects in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T050 [US2] Build all 31 exact guest-description catalogue entries with categories, supported soft effects, and non-actionable reasons in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T051 [US2] Encode Bartek affinity for Jakub G. and Michał Z., Mariusz/Sławek affinity, newcomer/Leszek avoidance, work-cluster avoidance, and the corrected Maciek/Jakub non-affinity in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T052 [US2] Generate lowest-tier work-group effects and merge validated assistant proposals without duplicate evidence/category/effect identities in `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T053 [US2] Compute deduplicated `CategoryScore` and `PlanObjective` values for relationship, location, grouping, `T1`, balance, and risk effects in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T054 [US2] Compare candidates by total soft value, published category vector, and canonical arrangement in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T055 [US2] Add deterministic hard-invariant-preserving pair-swap improvement until no candidate swap improves `PlanObjective` in `Sources/workation2026/DeterministicPlanner.swift`
+- [ ] T056 [US2] Update the SwiftAgent prompt and proposal merge path for source IDs, exact evidence, six categories, and soft-only effects in `Sources/workation2026/PolicyAssistant.swift`
+
+**Checkpoint**: User Story 2 independently produces an auditable, deterministic plan influenced by all actionable Scenario 2 evidence and all six competition categories.
+
+---
+
+## Phase 11: User Story 3 Amendment - Reject Catalogue Drift Clearly (Priority: P3)
+
+**Goal**: Fail clearly when the built-in catalogue no longer matches the canonical Scenario 2 evidence, without replacing an existing output file.
+
+**Independent Test**: Mutate or omit a description/note in a Scenario 2 fixture and inject invalid assistant proposals; verify clear catalogue diagnostics, non-zero failure for built-in catalogue drift, ignored assistant-only invalidity, and unchanged destination content.
+
+### Tests for User Story 3 Amendment
+
+- [ ] T057 [P] [US3] Add tests for missing sources, changed exact evidence, duplicate source identities, empty categories, and missing non-actionable reasons in `Tests/workation2026Tests/PolicyTests.swift`
+- [ ] T058 [P] [US3] Add CLI tests proving built-in catalogue drift fails before publication and preserves an existing destination in `Tests/workation2026Tests/CLIRunTests.swift`
+
+### Implementation for User Story 3 Amendment
+
+- [ ] T059 [US3] Return precise built-in catalogue coverage and evidence-drift errors from `Sources/workation2026/SeatingPolicy.swift`
+- [ ] T060 [US3] Surface fatal built-in catalogue validation separately from non-fatal assistant proposal rejection in `Sources/workation2026/App.swift`
+
+**Checkpoint**: User Story 3 clearly distinguishes authoritative catalogue drift from optional assistant rejection and preserves output on failure.
+
+---
+
+## Phase 12: Narrative Catalogue Polish & Cross-Cutting Concerns
+
+**Purpose**: Validate the complete amendment against the competition, contract, and performance requirements.
+
+- [ ] T061 [P] Update the six competition categories, complete evidence catalogue behavior, and soft-only narrative rules in `README.md`
+- [ ] T062 Update the regenerated Scenario 2 assignment, selected seventh-chair table, category outcomes, and unavoidable trade-offs in `specs/001-wedding-seating-plan/research.md`
+- [ ] T063 Run the amended build, focused tests, full Swift test suite, determinism checks, and failure-preservation checks from `specs/001-wedding-seating-plan/quickstart.md`
+- [ ] T064 Validate the regenerated `output/scenario2-plan.json` against `contract/output-schema.json` and verify it contains no policy, evidence, category, explanation, or score fields
+- [ ] T065 Confirm the complete catalogue planner remains below 10 seconds using `Tests/workation2026Tests/CLIRunTests.swift`
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: Starts immediately.
-- **Foundational (Phase 2)**: Depends on Phase 1 and blocks all user stories.
-- **US1 (Phase 3)**: Depends on T004-T008 and is the MVP.
-- **US2 (Phase 4)**: Depends on the Scenario 2 candidate planner from US1.
-- **US3 (Phase 5)**: Depends on shared Scenario 2 validation from Phase 2 and can be developed in parallel with US2 after US1 contracts stabilize.
-- **Polish (Phase 6)**: Depends on all desired user-story phases.
+- **Completed Scenario 2 phases (T001-T031)**: Existing prerequisite baseline.
+- **Narrative Setup (Phase 7)**: Starts after the amended plan is approved.
+- **Narrative Foundation (Phase 8)**: Depends on T032-T034 and blocks amended user-story work.
+- **US1 Amendment (Phase 9)**: Depends on T035-T038 and is the amended MVP.
+- **US2 Amendment (Phase 10)**: Depends on the soft-only hard boundary from T041 and shared catalogue types from Phase 8.
+- **US3 Amendment (Phase 11)**: Depends on catalogue validation from T037 and can proceed alongside planner scoring after T050 establishes complete entries.
+- **Polish (Phase 12)**: Depends on T039-T060.
 
 ### User Story Dependency Graph
 
 ```text
-Setup -> Foundational -> US1 (MVP) -> US2 -> Polish
-                                \-> US3 -----> Polish
+Completed Scenario 2 -> Narrative Setup -> Narrative Foundation -> US1 Amendment (MVP) -> US2 Amendment -> Polish
+                                                                    \--------------------> US3 Amendment -> Polish
 ```
 
 ### Parallel Opportunities
 
-- T007 and T008 can proceed in parallel after T004-T006 define shared APIs.
-- T009, T010, and T011 can proceed in parallel after foundational validation contracts stabilize.
-- T016, T017, and T018 can proceed in parallel after US1 produces valid Scenario 2 candidates.
-- T023 and T024 can proceed in parallel after foundational validation contracts stabilize.
-- T027 and T028 can proceed in parallel once the final policy behavior is settled.
+- T033 and T034 can proceed in parallel after T032 records the baseline.
+- T039 and T040 can proceed in parallel after T035-T038 define shared APIs.
+- T043, T046, and T048 can proceed in parallel after the narrative foundation; T044-T045 follow T043 in the policy test file, and T047 follows T046 in the planner test file before T049-T056 implementation.
+- T057 and T058 can proceed in parallel after T050 defines the complete built-in catalogue.
+- T061 can proceed in parallel with T062 after final policy behavior is settled.
 
-### Parallel Example: User Story 1
+### Parallel Example: User Story 1 Amendment
 
 ```text
-Task: "Add plan-validator coverage in Tests/workation2026Tests/ValidationTests.swift"
-Task: "Add planner coverage in Tests/workation2026Tests/DeterministicPlannerTests.swift"
-Task: "Add CLI integration coverage in Tests/workation2026Tests/CLIRunTests.swift"
+Task: "Add narrative soft-precedence coverage in Tests/workation2026Tests/DeterministicPlannerTests.swift"
+Task: "Add unchanged-output-schema coverage in Tests/workation2026Tests/CLIRunTests.swift"
 ```
 
-### Parallel Example: User Story 2
+### Parallel Example: User Story 2 Amendment
 
 ```text
-Task: "Add policy catalogue coverage in Tests/workation2026Tests/PolicyTests.swift"
-Task: "Add policy scoring coverage in Tests/workation2026Tests/DeterministicPlannerTests.swift"
-Task: "Add end-to-end policy assertions in Tests/workation2026Tests/CLIRunTests.swift"
+Task: "Add complete evidence catalogue coverage in Tests/workation2026Tests/PolicyTests.swift"
+Task: "Add six-category objective and pair-swap coverage in Tests/workation2026Tests/DeterministicPlannerTests.swift"
+Task: "Add six-category integration assertions in Tests/workation2026Tests/CLIRunTests.swift"
 ```
 
 ## Implementation Strategy
 
 ### MVP First
 
-1. Complete Phases 1 and 2.
-2. Complete US1 through T015.
-3. Run the US1 independent test using `input/scenario2.json`.
-4. Stop for review only after the structural Scenario 2 plan is valid, deterministic, and schema-shaped.
+1. Treat T001-T031 as the completed Scenario 2 baseline.
+2. Complete Narrative Setup and Foundation through T038.
+3. Complete the US1 amendment through T042.
+4. Run the amended US1 independent test and stop for review only after structural validity, determinism, soft-only narrative behavior, and unchanged schema are proven.
 
 ### Incremental Delivery
 
-1. Add US2 policies and scoring while preserving the US1 contract.
-2. Add US3 failure coverage and output-preservation behavior.
-3. Complete documentation, schema validation, performance verification, and the full quickstart sequence.
+1. Add the complete US2 catalogue, category objective, and pair-swap improvement while preserving US1.
+2. Add US3 catalogue-drift diagnostics and output-preservation behavior.
+3. Regenerate the plan, document trade-offs, validate schema and performance, and run the full quickstart sequence.
 
 ## Format Validation
 

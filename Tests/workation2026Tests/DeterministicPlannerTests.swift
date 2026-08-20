@@ -3,6 +3,16 @@ import Testing
 
 @Suite
 struct DeterministicPlannerTests {
+    private func assignments(in plan: SeatingPlan) -> [String: String] {
+        Dictionary(uniqueKeysWithValues: plan.tables.flatMap { table in
+            table.guests.map { ($0, table.tableId) }
+        })
+    }
+
+    private func satisfiesHardInvariants(_ plan: SeatingPlan, scenario: SeatingScenario) -> Bool {
+        (try? PlanValidator.validate(plan, for: scenario)) != nil
+    }
+
     @Test
     func producesCompleteCanonicalScenario2Plan() throws {
         let scenario = plannerScenario()
@@ -32,7 +42,7 @@ struct DeterministicPlannerTests {
     }
 
     @Test
-    func enforcesCompanionAndSeparationPoliciesBeforeSoftPreferences() throws {
+    func treatsCompanionAndSeparationNarrativesAsSoftPreferences() throws {
         let scenario = plannerScenario()
         let policies = [
             SeatingPolicy(kind: .companion, guestIDs: ["guest1", "guest20"], tableID: nil, priority: .companion, evidence: "named companions"),
@@ -41,13 +51,26 @@ struct DeterministicPlannerTests {
         ]
 
         let plan = try DeterministicPlanner.plan(for: scenario, policies: policies)
-        let tableForGuest = Dictionary(uniqueKeysWithValues: plan.tables.flatMap { table in
-            table.guests.map { ($0, table.tableId) }
-        })
+        let tableForGuest = assignments(in: plan)
 
-        #expect(tableForGuest["guest1"] == tableForGuest["guest20"])
-        #expect(tableForGuest["guest2"] != tableForGuest["guest3"])
+        #expect(satisfiesHardInvariants(plan, scenario: scenario))
+        #expect(tableForGuest["guest1"] != nil)
+        #expect(tableForGuest["guest20"] != nil)
+        #expect(tableForGuest["guest2"] != nil)
+        #expect(tableForGuest["guest3"] != nil)
         #expect(tableForGuest["guest4"] == "T4")
+    }
+
+    @Test
+    func narrativeRelationshipsCannotInvalidateHardConstraints() throws {
+        let scenario = plannerScenario()
+        let policies = (1...8).map { index in
+            SeatingPolicy(kind: .companion, guestIDs: ["bartek", "guest\(index)"], tableID: nil, priority: .companion, evidence: "soft relationship \(index)", weight: 100, category: .relationships)
+        }
+
+        let plan = try DeterministicPlanner.plan(for: scenario, policies: policies)
+
+        #expect(satisfiesHardInvariants(plan, scenario: scenario))
     }
 
     @Test

@@ -5,8 +5,37 @@ import Testing
 @Suite
 struct PolicyTests {
     @Test
-    func catalogueUsesOnlyKnownGuestsAndVenueLocations() {
-        let scenario = policyScenario()
+    func scenario2CatalogueCoversEveryExactEvidenceSource() throws {
+        let scenario = try scenario2()
+        let entries = try SeatingPolicyCatalogue.validatedEntries(for: scenario)
+        let expectedEvidence = Set(scenario.tables.compactMap(\.notes) + scenario.guests.compactMap(\.description))
+
+        #expect(entries.count == 36)
+        #expect(Set(entries.map(\.evidence)) == expectedEvidence)
+        #expect(Set(entries.map(\.source)).count == entries.count)
+        #expect(entries.allSatisfy { !$0.categories.isEmpty })
+        #expect(entries.allSatisfy { $0.isActionable || !($0.nonActionableReason?.isEmpty ?? true) })
+        #expect(entries.first(where: { $0.source == .guest("piotr") })?.isActionable == false)
+    }
+
+    @Test
+    func catalogueValidationRejectsDriftAndDuplicateSources() throws {
+        let scenario = try scenario2()
+        let entries = SeatingPolicyCatalogue.entries(for: scenario)
+        let first = try #require(entries.first)
+        let changed = EvidenceCatalogueEntry(source: first.source, evidence: "changed", categories: first.categories, policies: [], nonActionableReason: "changed")
+
+        #expect(throws: CatalogueValidationError.evidenceMismatch(first.source.id)) {
+            try SeatingPolicyCatalogue.validate([changed] + Array(entries.dropFirst()), for: scenario)
+        }
+        #expect(throws: CatalogueValidationError.duplicateSource(first.source.id)) {
+            try SeatingPolicyCatalogue.validate(entries + [first], for: scenario)
+        }
+    }
+
+    @Test
+    func catalogueUsesOnlyKnownGuestsAndVenueLocations() throws {
+        let scenario = try scenario2()
         let policies = SeatingPolicyCatalogue.policies(for: scenario)
 
         #expect(policies.contains { $0.kind == .locationPreference && $0.guestIDs == ["zosia"] && $0.tableID == "T4" })
@@ -26,16 +55,17 @@ struct PolicyTests {
         #expect(policy(for: ["chrzestna_ania", "swiadek_kuba", "tetiana"])?.weight == 300)
         #expect(policy(for: ["zosia"])?.tableID == "T4")
         #expect(policy(for: ["zosia"])?.weight == 300)
-        #expect(policy(for: ["jacek", "leszek", "pawel"])?.tableID == "T5")
-        #expect(policy(for: ["jacek", "leszek", "pawel"])?.weight == 200)
+        #expect(policy(for: ["jacek", "pawel"])?.tableID == "T5")
+        #expect(policy(for: ["jacek", "pawel"])?.weight == 250)
         #expect(policy(for: ["leszek", "kuba_g"])?.kind == .avoidancePreference)
         #expect(policy(for: ["leszek", "michal_z"])?.kind == .avoidancePreference)
-        #expect(policy(for: ["kuba_g", "michal_z"])?.kind == .workClusterAvoidance)
-        #expect(!policies.contains { $0.guestIDs.contains("michal_s") && $0.evidence.localizedCaseInsensitiveContains("Turcji") })
+        #expect(policy(for: ["kuba_g"])?.kind == .workClusterAvoidance)
+        #expect(policy(for: ["michal_z"])?.kind == .workClusterAvoidance)
+        #expect(!policies.contains { $0.guestIDs == ["michal_s"] && $0.kind != .groupPreference })
         #expect(!policies.contains { $0.guestIDs.contains("donald_t") || $0.guestIDs.contains("jaroslaw_k") })
-        #expect(policy(for: ["klara", "przemek", "tomek"])?.weight == 75)
-        #expect(policy(for: ["jakub", "maciek"])?.weight == 50)
-        #expect(policy(for: ["chrzestna_ania", "gosia", "kacper", "swiadek_kuba", "tetiana"])?.weight == 100)
+        #expect(policy(for: ["klara", "przemek", "tomek"])?.weight == 40)
+        #expect(policy(for: ["jakub", "maciek"]) == nil)
+        #expect(policy(for: ["chrzestna_ania", "gosia", "kacper", "swiadek_kuba", "tetiana"])?.weight == 60)
     }
 
     @Test

@@ -31,9 +31,12 @@
 
 ## Notes
 
-- Validation passed on 2026-08-19. The specification intentionally defers the complete evidence-backed seating-policy catalogue to clarification and planning; it does not assume private organizer scoring rules.
+- Validation passed on 2026-08-19. The specification contains the complete evidence-backed Scenario 2 seating-policy catalogue and does not assume scoring signals beyond the supplied input and approved amendments.
 - The Swift/SwiftPM platform mandate is governed by the project constitution and will be addressed in the technical plan, while this specification remains focused on user outcomes and behavior.
 - Scenario 2 amendment validation passed on 2026-08-19. The updated specification requires 31 active guests at five tables with four capacities of six and one capacity of seven, preserves Bartek and Nina at `T1`, and records only narrative-supported newcomer preferences.
 - The approved amendment requiring exactly two of Bartek's work-group colleagues at `T1` was validated on 2026-08-19. It is a mandatory composition rule; Bartek is excluded from the two-person colleague count.
 - `input/scenario2.json` is the canonical fixture for validating the updated program. Its five six-seat base tables are intentional; the solver selects the one table that receives the seventh chair in the final plan.
 - Clarification completed on 2026-08-19: a work-dominated table has four or more work-group guests, and the solver selects the seventh-chair table by the best overall seating plan with the existing lexicographic tie-break.
+- Narrative catalogue amendment validated on 2026-08-19: all 31 exact guest descriptions and all five exact table notes are accounted for under the six competition categories or explicitly marked non-actionable.
+- The amended specification limits hard constraints to capacity, unique and complete assignment, couple placement, and approved exact `T1` composition; every narrative-derived policy is soft and auditable.
+- Each actionable catalogue policy requires focused acceptance coverage, and the generated output schema remains unchanged.

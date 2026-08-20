@@ -21,9 +21,11 @@ The Scenario 2 format is represented by [input/scenario2.json](../../../input/sc
 
 The active roster excludes `donald_t` and `jaroslaw_k` and includes `kuba_g`, `michal_z`, and `michal_s`. `T1` must contain Bartek, Nina, and exactly two additional `work`-group guests.
 
+Every one of the 31 guest `description` values and five table `notes` values participates in an internal catalogue audit. Each exact value is categorized or explicitly non-actionable. This catalogue changes only assignment selection; it does not add input requirements or output fields.
+
 ## Optional Agent Configuration
 
-When all required variables are present, the executable invokes SwiftAgent to propose additional policy candidates from descriptions and table notes. When they are absent, it uses the built-in public-evidence catalogue and still completes a valid invocation deterministically.
+When all required variables are present, the executable may invoke SwiftAgent to propose additional soft, categorized policy candidates from descriptions and table notes. Proposals cannot modify hard constraints and are accepted only with known references and exact evidence. When configuration is absent, the built-in catalogue still completes the invocation deterministically.
 
 | Variable | Required | Meaning |
 |---|---:|---|
@@ -46,7 +48,7 @@ The output must conform exactly to [contract/output-schema.json](../../../contra
 }
 ```
 
-No additional properties are emitted. Every input guest ID appears exactly once; four tables contain six IDs and one solver-selected table contains seven. `T1` contains Bartek, Nina, and exactly two other `work`-group guests. The selected seven-seat table maximizes the documented policy objective; equal results use canonical lexical ordering.
+No additional properties are emitted. Every input guest ID appears exactly once; four tables contain six IDs and one solver-selected table contains seven. `T1` contains Bartek, Nina, and exactly two other `work`-group guests. The selected seven-seat table maximizes the documented six-category soft objective; equal results use canonical lexical ordering. Policies, categories, evidence, explanations, and scores are never emitted.
 
 ## Exit Behavior
 

@@ -27,7 +27,7 @@ enum DeterministicPlanner {
                 preferenceWeight(for: lhs, policies: policies) > preferenceWeight(for: rhs, policies: policies)
                     || (preferenceWeight(for: lhs, policies: policies) == preferenceWeight(for: rhs, policies: policies) && lhs < rhs)
             }
-        var bestCandidate: (plan: SeatingPlan, score: Int)?
+        var bestCandidate: (plan: SeatingPlan, objective: PlanObjective)?
 
         for extraSeatTableID in tableIDs {
             let requiredNonWorkGuests = extraSeatTableID == "T1" ? 3 : 2
@@ -47,13 +47,14 @@ enum DeterministicPlanner {
                     ) else {
                         continue
                     }
-                    let candidateScore = planScore(plan, guestsByID: guestsByID, policies: policies)
+                    let improvedPlan = improve(plan, scenario: scenario, guestsByID: guestsByID, policies: policies)
+                    let candidateObjective = objective(for: improvedPlan, guestsByID: guestsByID, policies: policies)
                     if let currentBest = bestCandidate {
-                        if candidateScore > currentBest.score || (candidateScore == currentBest.score && isCanonical(plan, before: currentBest.plan)) {
-                            bestCandidate = (plan, candidateScore)
+                        if candidateObjective > currentBest.objective {
+                            bestCandidate = (improvedPlan, candidateObjective)
                         }
                     } else {
-                        bestCandidate = (plan, candidateScore)
+                        bestCandidate = (improvedPlan, candidateObjective)
                     }
                 }
             }
@@ -105,7 +106,7 @@ enum DeterministicPlanner {
             if tableID == "T1" && guestsByID[guestID]?.group == "work" {
                 return nil
             }
-            guard occupants.count < capacities[tableID, default: 0], respectsHardPolicies(guestID, tableID: tableID, assignments: assignments, policies: policies) else {
+            guard occupants.count < capacities[tableID, default: 0] else {
                 return nil
             }
             return (tableID, score(for: guestID, tableID: tableID, occupants: occupants, guestsByID: guestsByID, policies: policies))
@@ -120,28 +121,6 @@ enum DeterministicPlanner {
         .tableID
     }
 
-    private static func respectsHardPolicies(_ guestID: String, tableID: String, assignments: [String: [String]], policies: [SeatingPolicy]) -> Bool {
-        let occupants = assignments[tableID, default: []]
-        for policy in policies {
-            switch policy.kind {
-            case .mandatoryTable:
-                if policy.guestIDs.contains(guestID), policy.tableID != tableID { return false }
-            case .separate:
-                if policy.guestIDs.contains(guestID), policy.guestIDs.contains(where: occupants.contains) { return false }
-            case .companion:
-                if policy.guestIDs.contains(guestID) {
-                    let assignedTable = assignments.first { _, assignedGuests in
-                        policy.guestIDs.contains { $0 != guestID && assignedGuests.contains($0) }
-                    }?.key
-                    if let assignedTable, assignedTable != tableID { return false }
-                }
-            case .locationPreference, .avoidancePreference, .workClusterAvoidance, .riskClusterAvoidance, .affinityPreference, .groupPreference:
-                continue
-            }
-        }
-        return true
-    }
-
     private static func score(
         for guestID: String,
         tableID: String,
@@ -153,7 +132,7 @@ enum DeterministicPlanner {
         for policy in policies where policy.guestIDs.contains(guestID) {
             switch policy.kind {
             case .companion:
-                if policy.guestIDs.contains(where: occupants.contains) { result += 10_000 }
+                if policy.guestIDs.contains(where: occupants.contains) { result += policy.weight }
             case .locationPreference:
                 if policy.tableID == tableID { result += policy.weight }
             case .avoidancePreference:
@@ -184,7 +163,7 @@ enum DeterministicPlanner {
         policies.filter { $0.guestIDs.contains(guestID) }.reduce(0) { total, policy in
             switch policy.kind {
             case .companion:
-                return total + 10_000
+                return total + policy.weight
             case .separate:
                 return total + 1_000
             case .locationPreference:
@@ -205,12 +184,76 @@ enum DeterministicPlanner {
         }
     }
 
-    private static func planScore(_ plan: SeatingPlan, guestsByID: [String: Guest], policies: [SeatingPolicy]) -> Int {
-        plan.tables.reduce(0) { total, table in
-            total + table.guests.reduce(0) { partial, guestID in
-                partial + score(for: guestID, tableID: table.tableId, occupants: table.guests.filter { $0 != guestID }, guestsByID: guestsByID, policies: policies)
+    static func objective(for plan: SeatingPlan, guestsByID: [String: Guest], policies: [SeatingPolicy]) -> PlanObjective {
+        let tableForGuest = Dictionary(uniqueKeysWithValues: plan.tables.flatMap { table in table.guests.map { ($0, table.tableId) } })
+        var categoryScore = CategoryScore()
+        for policy in policies {
+            let value: Int
+            switch policy.kind {
+            case .mandatoryTable, .separate:
+                value = 0
+            case .companion, .affinityPreference:
+                let tables = Set(policy.guestIDs.compactMap { tableForGuest[$0] })
+                value = tables.count == 1 ? policy.weight : 0
+            case .locationPreference:
+                value = policy.guestIDs.contains { tableForGuest[$0] == policy.tableID } ? policy.weight : 0
+            case .avoidancePreference:
+                let tables = policy.guestIDs.compactMap { tableForGuest[$0] }
+                value = Set(tables).count == tables.count ? policy.weight : 0
+            case .workClusterAvoidance:
+                value = policy.guestIDs.allSatisfy { guestID in
+                    guard let tableID = tableForGuest[guestID], let table = plan.tables.first(where: { $0.tableId == tableID }) else { return false }
+                    return table.guests.filter { guestsByID[$0]?.group == "work" }.count < 4
+                } ? policy.weight : 0
+            case .riskClusterAvoidance:
+                value = plan.tables.allSatisfy { table in table.guests.filter(policy.guestIDs.contains).count <= 3 } ? policy.weight : 0
+            case .groupPreference:
+                guard let sourceTable = tableForGuest[policy.evidenceSource.id] else { value = 0; break }
+                value = policy.guestIDs.contains { $0 != policy.evidenceSource.id && tableForGuest[$0] == sourceTable } ? policy.weight : 0
             }
+            categoryScore.add(value, category: policy.category, identity: policy.identity)
         }
+        return PlanObjective(score: categoryScore, canonicalVector: canonicalVector(plan))
+    }
+
+    private static func improve(_ initialPlan: SeatingPlan, scenario: SeatingScenario, guestsByID: [String: Guest], policies: [SeatingPolicy]) -> SeatingPlan {
+        var current = initialPlan
+        while true {
+            let currentObjective = objective(for: current, guestsByID: guestsByID, policies: policies)
+            var bestPlan = current
+            var bestObjective = currentObjective
+            let movableGuests = current.tables.flatMap(\.guests).filter { $0 != "bartek" && $0 != "nina" }.sorted()
+            for firstIndex in movableGuests.indices {
+                for secondIndex in movableGuests.indices where secondIndex > firstIndex {
+                    let first = movableGuests[firstIndex]
+                    let second = movableGuests[secondIndex]
+                    guard tableID(for: first, in: current) != tableID(for: second, in: current) else { continue }
+                    let candidate = swapping(first, second, in: current)
+                    guard (try? PlanValidator.validate(candidate, for: scenario)) != nil else { continue }
+                    let candidateObjective = objective(for: candidate, guestsByID: guestsByID, policies: policies)
+                    if candidateObjective > bestObjective {
+                        bestPlan = candidate
+                        bestObjective = candidateObjective
+                    }
+                }
+            }
+            guard bestObjective > currentObjective else { return current }
+            current = bestPlan
+        }
+    }
+
+    private static func tableID(for guestID: String, in plan: SeatingPlan) -> String? {
+        plan.tables.first { $0.guests.contains(guestID) }?.tableId
+    }
+
+    private static func swapping(_ first: String, _ second: String, in plan: SeatingPlan) -> SeatingPlan {
+        SeatingPlan(tables: plan.tables.map { table in
+            SeatedTable(tableId: table.tableId, guests: table.guests.map { guestID in
+                if guestID == first { return second }
+                if guestID == second { return first }
+                return guestID
+            }.sorted())
+        })
     }
 
     private static func canonicalVector(_ plan: SeatingPlan) -> [String] {

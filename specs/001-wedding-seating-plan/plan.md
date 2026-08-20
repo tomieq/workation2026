@@ -8,7 +8,7 @@
 
 ## Summary
 
-Amend the existing SwiftPM executable for Scenario 2 without changing its `./run.sh <input.json> <output.json>` interface or output schema. Decode and validate the one-chair authorization in `input/scenario2.json`; produce four six-guest tables and one solver-selected seven-guest table; enforce Bartek, Nina, and exactly two additional work colleagues at `T1`; and replace retired guest policies with the documented newcomer policies. The deterministic planner remains authoritative; SwiftAgent remains an optional, validated policy-proposal sidecar.
+Amend the existing SwiftPM executable without changing `./run.sh <input.json> <output.json>` or the output schema. Preserve the four Scenario 2 hard-constraint classes, replace narrative hard companion/separation behavior with soft policies, and add an auditable built-in catalogue covering all 31 guest descriptions and five table notes across `Grupowanie zespołu`, `Lokalizacja`, `Relacje`, `T1 Production`, `Balans`, and `Ryzyko`. The deterministic planner remains authoritative; SwiftAgent may propose only validated soft policies.
 
 ## Technical Context
 
@@ -26,9 +26,9 @@ Amend the existing SwiftPM executable for Scenario 2 without changing its `./run
 
 **Performance Goals**: Generate or clearly reject `input/scenario2.json` within 10 seconds
 
-**Constraints**: Five base six-seat tables plus exactly one authorized solver-selected chair; 31 active guests assigned exactly once; Bartek and Nina plus exactly two other work-group guests at `T1`; output has only the published schema fields; deterministic canonical result; leave a pre-existing output untouched on failure. Runtime model credentials/configuration are read only from environment and are never written to output or logs.
+**Constraints**: Five base six-seat tables plus exactly one authorized solver-selected chair; 31 active guests assigned exactly once; Bartek and Nina plus exactly two other work-group guests at `T1`; narrative evidence is soft; all 36 evidence sources are audited; no evidence contributes twice within one category; output has only the published schema fields; deterministic canonical result; leave a pre-existing output untouched on failure. Runtime model credentials/configuration are read only from environment and are never written to output or logs.
 
-**Scale/Scope**: One Scenario 2 invocation, 31 guests, five tables, one extra chair, and a finite catalogue of public-evidence policies
+**Scale/Scope**: One Scenario 2 invocation, 31 guests, five tables, one extra chair, 36 evidence entries, six scoring categories, and a finite set of evidence-backed soft policies
 
 ## Constitution Check
 
@@ -36,13 +36,13 @@ Amend the existing SwiftPM executable for Scenario 2 without changing its `./run
 
 | Constitution principle | Design response | Status |
 |---|---|---|
-| Evidence-Based Requirement Extraction | Policies are a static catalogue sourced only from the brief, scenario fields, approved change request, and clarifications. Additional work-team rules remain excluded. | Pass |
+| Evidence-Based Requirement Extraction | Every exact Scenario 2 description and note has one catalogue entry; actionable rules retain their evidence, and unsupported traits are explicitly non-actionable. | Pass |
 | Swift Package Manager Implementation | `Package.swift` declares SwiftAgent and the `workation2026` executable; all source and Swift Testing targets use SwiftPM. | Pass |
 | Contract-Valid, Change-Controlled Swift Executable Is Non-Negotiable | `run.sh` delegates to the executable; decoding, Scenario 2 structural validation, result validation, and atomic publication guard the contract. | Pass |
-| Deterministic, Verifiable Optimization | The application-owned solver evaluates all allowed seventh-chair candidates, enforces hard rules, scores documented preferences, and chooses the lexicographically smallest tied arrangement. SwiftAgent policy suggestions require deterministic validation and cannot bypass this result. | Pass |
+| Deterministic, Verifiable Optimization | The application-owned solver evaluates all allowed seventh-chair candidates, enforces only the four approved hard classes, compares six documented category scores, and chooses the canonical tied arrangement. SwiftAgent cannot create hard rules. | Pass |
 | Simplicity and Explainability | A single executable module separates decoding, policy extraction, deterministic planning, agent orchestration, and JSON encoding without a persistence layer or framework. | Pass |
 
-**Dependency justification**: SwiftAgent is used for the requested AI-assisted transformation of narrative notes into candidate policies. Its non-deterministic output is not authoritative: the policy validator rejects unsupported references, unknown guests/tables, invalid priority classes, or any change to hard constraints beyond the published catalogue.
+**Dependency justification**: SwiftAgent remains an optional narrative-policy sidecar. Its non-deterministic output is not authoritative: validation rejects unknown references, non-exact evidence, unsupported categories, duplicate evidence/category contributions, and every proposed hard rule.
 
 ## Project Structure
 
@@ -83,18 +83,20 @@ Tests/
 
 ## Implementation Design
 
-1. **Models and fixture**: Extend `SeatingScenario` with Codable `ExtraSeatPolicy`; retain base `VenueTable.capacity`. Validate five six-seat base tables, 31 unique active guests, the exact Scenario 2 roster, and one chair authorized for any table.
-2. **Validation**: Derive final capacity from the selected seven-seat table instead of assuming six seats everywhere. Add clear errors for invalid extra-seat authorization, roster mismatch, invalid seven-seat distribution, and invalid `T1` colleague count; retain duplicate, unknown, missing, couple, and atomic-publication behavior.
-3. **Policies**: Remove retired Donald/Jarosław entries. Add evidence-backed soft avoidance for `leszek` with `kuba_g` and `michal_z`, plus a newcomer work-cluster penalty at four or more work guests. Do not create a Bald Club policy. Encode the `T1` colleague composition as a hard rule.
-4. **Planner**: For each eligible `T1` pair of non-Bartek work colleagues and each eligible seventh-chair table, construct a deterministic assignment that respects hard policies. Apply repeatable assignment improvements only when they improve the ordered policy objective. Compare complete candidates by objective, then canonical sorted table/guest vector.
-5. **Tests**: Update helper scenarios to 31 guests plus an extra-seat policy. Add validations for capacity authorization, exact roster, selected seven-seat distribution, and `T1` composition. Add planner and CLI tests for `input/scenario2.json`: `[6,6,6,6,7]`, unique guest coverage, newcomer avoidance when a better candidate exists, and byte-identical output across repeated runs.
+1. **Hard invariants**: Keep capacity, complete unique assignment, couple placement, and exact `T1` work composition in `Validation.swift` and candidate construction. Remove narrative `.companion` and `.separate` checks from `respectsHardPolicies`.
+2. **Evidence catalogue**: Add `CompetitionCategory`, `EvidenceSource`, and `EvidenceCatalogueEntry` types. `SeatingPolicyCatalogue` returns exactly 36 entries keyed by table or guest ID, preserving the exact input text, categories, actionability, and generated soft policies. Startup validation rejects catalogue drift against `input/scenario2.json` semantics before planning.
+3. **Soft policies**: Add a category to every actionable policy and replace hard companion/separation kinds with relationship affinity/avoidance scoring. Encode table notes for `T1` through `T5`, Bartek affinities for `kuba_g` and `michal_z`, corrected non-affinity for the Maciek/Jakub food contrast, and explicit non-actionable reasons for uncertain or cosmetic signals.
+4. **Objective**: Compute one `CategoryScore` per competition category. Each evidence entry contributes at most once to a category for a candidate. Compare candidates by total satisfied policy value, then by the six-category vector in the published category order, then by the canonical sorted table/guest vector. Positive and negative soft policies use documented integer strengths only within their category; no soft result invalidates a candidate.
+5. **Search**: Retain enumeration of eligible `T1` work pairs and seventh-chair tables. Extend deterministic construction with bounded pair swaps until no swap improves the complete objective, so policies involving guests assigned early can influence the final plan.
+6. **Assistant**: Restrict `PolicyAssistant` proposals to soft kinds and the six category names. Require known IDs, exact input evidence, a supported table reference, and a unique `(evidence source, category, effect)` identity; merge only proposals that do not duplicate the built-in catalogue.
+7. **Tests**: Add an audit test for 31 guest descriptions plus five notes, one focused test per actionable catalogue policy/effect, non-actionable-entry tests, hard-constraint precedence tests, category-score and duplicate-suppression tests, unchanged-schema coverage, deterministic repeated output, and the existing sub-10-second check.
 
 ## Phase 0 and Phase 1 Artifacts
 
-- [research.md](research.md): Scenario 2 technical decisions and alternatives.
-- [data-model.md](data-model.md): `ExtraSeatPolicy`, base versus final capacity, and `T1` composition.
-- [contracts/cli-contract.md](contracts/cli-contract.md): unchanged command interface with Scenario 2 invariants.
-- [quickstart.md](quickstart.md): Scenario 2 run, structural, determinism, and failure-preservation checks.
+- [research.md](research.md): Catalogue, soft-policy, objective, and search decisions.
+- [data-model.md](data-model.md): Evidence entries, competition categories, policies, category scores, and existing plan entities.
+- [contracts/cli-contract.md](contracts/cli-contract.md): Unchanged external JSON contract plus internal catalogue guarantees.
+- [quickstart.md](quickstart.md): Build, catalogue audit, category behavior, structure, determinism, and failure-preservation checks.
 
 ## Complexity Tracking
 
